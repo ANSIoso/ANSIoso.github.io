@@ -14,16 +14,16 @@ function submit_function() {
 // calcola il numero di volte che una determinata lettera è presente
 function calculate_letter_occurrance(names_string) {
     var letter_count = new Map;
-    var regex = /[^a-zA-Z]/g;
 
     // scorro tutte e solo le lettere dei due nomi
     for (var i = 0; i < names_string.length; i++) {
         var actual_letter = names_string.charAt(i) + "";
 
         // evito tutto ciò che non è una lettera
-        if (regex.test(actual_letter))
+        if (!actual_letter.match(/[a-zA-Z]/)) {
             continue;
-        
+        }
+
         // porto tutte le lettere in "upper case" 
         // (per evitare di considerare "a" e "A" lettere differenti)
         actual_letter = actual_letter.toUpperCase();
@@ -46,19 +46,19 @@ function calculate_letter_occurrance(names_string) {
     document.getElementById("calculation_area").innerHTML = "";
     document.getElementById("calculation_area").innerHTML += "<p>" + str_letter_count + "</p>";
     // =======================================================================================
-    
+
     sum_letter_occurrance(letter_count);
 }
 
 function sum_letter_occurrance(letter_count) {
     var actual_sum = [];
-    
+
 
     letter_count.forEach((element) => {
         actual_sum.push(element);
     });
 
-    while(actual_sum.length > 2){
+    while (actual_sum.length > 2) {
         actual_sum = sum_extremes(actual_sum);
 
         var s = "";
@@ -70,21 +70,21 @@ function sum_letter_occurrance(letter_count) {
     }
 }
 
-function sum_extremes(actual_sum){
+function sum_extremes(actual_sum) {
     var next_sum = [];
-    var start = 0, end = actual_sum.length-1;
+    var start = 0, end = actual_sum.length - 1;
 
-    while(start <= end){
+    while (start <= end) {
         var next;
 
-        if(start == end)
+        if (start == end)
             next = actual_sum[start] + "";
         else
             next = actual_sum[start] + actual_sum[end] + "";
 
         for (var i = 0; i < next.length; i++)
             next_sum.push(parseInt(next.charAt(i)));
-        
+
         start++;
         end--;
     }
