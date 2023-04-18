@@ -50,41 +50,73 @@ function calculate_letter_occurrance(names_string) {
     sum_letter_occurrance(letter_count);
 }
 
+// applico il procedimento di somma degli estremi degli array sino a quando l'array risultante 
+// non avrà solo 2 cefre così potremo avere una percentuale 
 function sum_letter_occurrance(letter_count) {
     var actual_sum = [];
-
 
     letter_count.forEach((element) => {
         actual_sum.push(element);
     });
 
-    while (actual_sum.length > 2) {
+    do{
         actual_sum = sum_extremes(actual_sum);
-
+        
+        // =====================================================================================
         var s = "";
         actual_sum.forEach((element) => {
             s += " " + element;
         });
 
-        document.getElementById("calculation_area").innerHTML += "<p>" + s + "</p>";
-    }
+        var p = "";
+        if(actual_sum.length <= 2)
+        p = "%";
+
+        document.getElementById("calculation_area").innerHTML += "<p>" + s + p + "</p>";
+        // =====================================================================================
+    }while (actual_sum.length > 2);
 }
+
+// somma gli estremi degli array
+
+// (passo 1)
+//                        +---+---+---+---+---+
+//   ------somma--------> | 6 |   |   |   |   |
+//   ↓               ↓    +---+---+---+---+---+
+// +---+---+---+---+---+
+// | 1 | 6 | 3 | 3 | 5 |
+// +---+---+---+---+---+
+
+// (passo 2)
+//                        +---+---+---+---+---+
+//       --somma--------> | 6 | 9 |   |   |   |
+//       ↓       ↓        +---+---+---+---+---+
+// +---+---+---+---+---+
+// | 1 | 6 | 3 | 3 | 5 |
+// +---+---+---+---+---+
 
 function sum_extremes(actual_sum) {
     var next_sum = [];
     var start = 0, end = actual_sum.length - 1;
 
+    // ripeto l'operazione di somma fino a quando non gli indici saranno sovrapposti o invertiti
+    // a quel punto vorrà dire che ho superato la metà dell'array e quindi il processo di somma sarà terminato
     while (start <= end) {
         var next;
 
+        // se i due indici sono sovrapposti vorra dire che mi trovo nel centro dell'array quindi non  
+        // dovrò sommare nulla ma solo inserire il valore attuale nell'array
         if (start == end)
             next = actual_sum[start] + "";
         else
             next = actual_sum[start] + actual_sum[end] + "";
 
+        // se la somma che ho ottenuto è troppo grande inserisco tutte le singole cifre convertendole prima in char
+        // così da accedere facilmente a tutte le posizioni
         for (var i = 0; i < next.length; i++)
             next_sum.push(parseInt(next.charAt(i)));
 
+        // in fine sposto gli indici
         start++;
         end--;
     }
