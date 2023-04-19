@@ -1,3 +1,7 @@
+:root{
+  --color-uno : #FA9884;
+}
+
 html {
   box-sizing: border-box;
   font-size: 16px;
@@ -29,11 +33,56 @@ body {
   align-items: center;
   text-align: center;
   min-height: 100vh;
+
+  background-color: var(--color-uno);
+  background: url("love_background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
 }
 
 .main-div{
-  background-color: blue;
+  background-color: grey;
+
+  padding: 4vh;
+  border-radius: 5px;
 
   height: 60vh;
   width: 50vh;
+}
+
+.glass{
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 20px;
+  border:1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.line-center{
+  margin:0;padding:0 10px;
+  background:#fff;
+  display:inline-block;
+}
+h2{
+
+  text-align:center;
+  position:relative;
+  z-index:2;
+
+}
+h2:after{
+  content:"";
+  position:absolute;
+  top:50%;
+  left:0;
+  right:0;
+  border-top:solid 1px red;
+  z-index:-1;
+}
+
+.name-input{
+  margin: 2vh;
 }
