@@ -2,28 +2,13 @@
   --color-uno : #FA9884;
 }
 
-html {
-  box-sizing: border-box;
-  font-size: 16px;
-}
-
-*, *:before, *:after {
-  box-sizing: inherit;
-}
-
-body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+*{
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  
+  font-size: 16px;
   font-weight: normal;
-}
-
-ol, ul {
-  list-style: none;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
 }
 
 body {
@@ -45,11 +30,12 @@ body {
 .main-div{
   background-color: grey;
 
+  margin: 1vh;
   padding: 4vh;
   border-radius: 5px;
 
   height: 60vh;
-  width: 50vh;
+  width: clamp(40vh, 50vh, 80%);
 }
 
 .glass{
@@ -61,28 +47,33 @@ body {
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
-.line-center{
-  margin:0;padding:0 10px;
-  background:#fff;
-  display:inline-block;
-}
-h2{
+.input-div{
+  display: flex;
+  flex-direction: row;
 
-  text-align:center;
-  position:relative;
-  z-index:2;
+  justify-content: center;
+  align-items: center;
 
-}
-h2:after{
-  content:"";
-  position:absolute;
-  top:50%;
-  left:0;
-  right:0;
-  border-top:solid 1px red;
-  z-index:-1;
+  justify-content: space-around;
 }
 
 .name-input{
-  margin: 2vh;
+  margin: 1vh;
+  padding: 1vh;
+
+  width: 80%;
+}
+
+.btn-reset-name{
+  margin: 1vh;
+  padding: 1vh;
+}
+
+.input-div hr {
+  margin: 1%;
+
+  flex: 1;
+  border: none;
+  height: 2px;
+  background: black;
 }

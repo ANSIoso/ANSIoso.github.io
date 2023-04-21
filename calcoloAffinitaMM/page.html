@@ -13,9 +13,17 @@
 
 <body>
     <div class="main-div glass">
-        <p> <input type="text" class="name-input" id="name1" name="name1"></p>
-        <h2><span  class="line-center">Test</span></h2>
-        <p> <input type="text" class="name-input" id="name2" name="name2"></p>
+        <div class="input-div"> <input type="text" class="name-input" id="name1" name="name1"> <button class="btn-reset-name">reset</button> </div>
+
+        <div class="input-div">
+            <hr>
+                <button>🔄</button>
+            <hr>
+        </div>
+
+        <div class="input-div"> <input type="text" class="name-input" id="name2" name="name2"> <button class="btn-reset-name">reset</button> </div>
+
+
         <button onclick="submit_function()">press</button>
         <div id="calculation_area">
         </div>
