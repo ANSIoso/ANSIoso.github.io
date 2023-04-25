@@ -43,8 +43,8 @@ function calculate_letter_occurrance(names_string) {
         str_letter_count += " " + key + ": " + value;
     });
 
-    document.getElementById("calculation_area").innerHTML = "";
-    document.getElementById("calculation_area").innerHTML += "<p>" + str_letter_count + "</p>";
+    document.getElementById("calculation-area").innerHTML = "";
+    document.getElementById("calculation-area").innerHTML += "<p>" + str_letter_count + "</p>";
     // =======================================================================================
 
     sum_letter_occurrance(letter_count);
@@ -72,7 +72,7 @@ function sum_letter_occurrance(letter_count) {
         if(actual_sum.length <= 2)
         p = "%";
 
-        document.getElementById("calculation_area").innerHTML += "<p>" + s + p + "</p>";
+        document.getElementById("calculation-area").innerHTML += "<p>" + s + p + "</p>";
         // =====================================================================================
     }while (actual_sum.length > 2);
 }
@@ -122,4 +122,17 @@ function sum_extremes(actual_sum) {
     }
 
     return next_sum;
+}
+
+function switch_names(){
+    var name_1_lable = document.getElementById("name1");
+    var name_2_lable = document.getElementById("name2");
+    var support = name_1_lable.value;
+
+    name_1_lable.value = name_2_lable.value;
+    name_2_lable.value = support;
+}
+
+function reset_label(name){
+    document.getElementById(name).value = "";
 }
