@@ -1,8 +1,138 @@
+:root{
+  --var-background-color : #372954;
+  --var-button-color : #ff4766;
+  --var-text-color : aliceblue;
+}
+
 *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  
   font-size: 16px;
   font-weight: normal;
+}
+
+
+html, body{
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: var(--var-background-color);
+
+  color: var(--var-text-color);
+}
+
+.main-div{
+  background-color: rgba(0, 0, 0, 0.1);
+
+  height: 60vh;
+  aspect-ratio: 4/5;
+  position: relative;
+
+  border-radius: 30px;
+  padding: 20px;
+}
+
+.input-div *{
+  height: 30px;
+}
+
+.role-div{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.center-container {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.center-element {
+  position: relative;
+}
+
+.center-element:before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.submit-div{
+  position: absolute;
+  bottom: 10px;
+
+  left:0;
+  right:0;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+}
+
+.name-input{
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.input{
+  width: 100%;
+  border: none;
+  padding: 5px;
+}
+
+.name-input .glow-btn{
+  aspect-ratio: 1/1;
+  font-size: 20px;
+  padding: 4px;
+  background-color: rgba(0, 0, 0, 0.1);
+  position: absolute;
+  right: 0;
+}
+
+.glow-btn{
+  transition: all 0.2s ease-in-out;
+}
+.glow-btn:hover{
+  color: var(--var-button-color);
+  box-shadow: 0 0 10px rgba(255, 71, 102, .4);
+}
+.glow-btn:active{
+  transform: rotate(90deg);
+}
+
+#calculation-div{
+  padding: 10px;
+}
+
+.submitt{
+  border: none;
+  width: 100%;
+
+  padding: 10px;
+  margin: 10px 20px;
+
+  border-radius: 10px;
+
+  background-color: var(--var-button-color);
+  color: var(--var-text-color);
+  transition: all 0.1s ease-in-out;
+}
+
+.submitt:hover{
+  box-shadow: 0 0 10px rgba(255, 71, 102, .4);
+}
+
+.submitt:active{
+  transform: translateY(4px);
 }

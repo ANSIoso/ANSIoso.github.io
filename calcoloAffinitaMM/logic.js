@@ -37,14 +37,17 @@ function calculate_letter_occurrance(names_string) {
         letter_count.set(actual_letter, letter_count.get(actual_letter) + 1);
     }
 
+    if(letter_count.size == 0)
+        return;
+
     // =======================================================================================
     var str_letter_count = "";
     letter_count.forEach((value, key) => {
         str_letter_count += " " + key + ": " + value;
     });
 
-    document.getElementById("calculation-area").innerHTML = "";
-    document.getElementById("calculation-area").innerHTML += "<p>" + str_letter_count + "</p>";
+    document.getElementById("calculation-div").innerHTML = "";
+    document.getElementById("calculation-div").innerHTML += "<p>" + str_letter_count + "</p>";
     // =======================================================================================
 
     sum_letter_occurrance(letter_count);
@@ -72,7 +75,7 @@ function sum_letter_occurrance(letter_count) {
         if(actual_sum.length <= 2)
         p = "%";
 
-        document.getElementById("calculation-area").innerHTML += "<p>" + s + p + "</p>";
+        document.getElementById("calculation-div").innerHTML += "<p>" + s + p + "</p>";
         // =====================================================================================
     }while (actual_sum.length > 2);
 }
