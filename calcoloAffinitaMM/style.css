@@ -1,7 +1,9 @@
 :root{
   --var-background-color : #372954;
-  --var-button-color : #ff4766;
-  --var-text-color : aliceblue;
+  --var-text-color : rgb(242, 245, 234);
+
+  --var-button-color : rgb(255, 173, 187);
+  --var-button-hover-color : rgb(255, 71, 102);
 }
 
 *{
@@ -86,6 +88,8 @@ html, body{
 }
 
 .input{
+  background-color: #D6DBD2;
+
   width: 100%;
   border: none;
   padding: 5px;
@@ -105,15 +109,14 @@ html, body{
 .name-input .glow-btn{
   aspect-ratio: 1/1;
   font-size: 20px;
-
-  color: rgba(0, 0, 0, 0.1);
 }
 
 .glow-btn{
   transition: all 0.2s ease-in-out;
+  color: var(--var-button-color);
 }
 .glow-btn:hover{
-  color: var(--var-button-color);
+  color: var(--var-button-hover-color);
   text-shadow: 0 0 10px rgba(255, 71, 102, .4);
 }
 .glow-btn:active{
@@ -121,7 +124,13 @@ html, body{
 }
 
 #calculation-div{
-  padding: 10px;
+  margin-top: 20px;
+}
+
+#calculation-div * {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .submitt{
@@ -139,9 +148,44 @@ html, body{
 }
 
 .submitt:hover{
+  background-color: var(--var-button-hover-color);
   box-shadow: 0 0 10px rgba(255, 71, 102, .4);
 }
 
 .submitt:active{
   transform: translateY(4px);
+}
+
+.letter{
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.1);
+
+  margin: 2px;
+  width: 30px;
+  aspect-ratio: 9/10;
+
+  font-size: 30px;
+  
+  border-radius: 10px;
+}
+
+.letter-number{
+  padding: 1px;
+  position: absolute;
+
+  font-size: 10px;
+  
+  width: 10px;
+  height: 10px;
+
+  top: -2px;
+  right: -2px;
+
+  background-color: red;
+  border-radius: 4px;
+}
+
+.calc-line{
+  display: flex;
+  flex-direction: row;
 }

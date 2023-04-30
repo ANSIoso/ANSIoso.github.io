@@ -41,21 +41,40 @@ function calculate_letter_occurrance(names_string) {
         return;
 
     // =======================================================================================
+
     var str_letter_count = "";
     letter_count.forEach((value, key) => {
-        str_letter_count += " " + key + ": " + value;
+        str_letter_count += create_card(key, value);
     });
 
     document.getElementById("calculation-div").innerHTML = "";
-    document.getElementById("calculation-div").innerHTML += "<p>" + str_letter_count + "</p>";
+    document.getElementById("calculation-div").innerHTML += "<div class=\"calc-line\">" + str_letter_count + "</div>";
     // =======================================================================================
 
     sum_letter_occurrance(letter_count);
 }
 
+function create_card(content, value){
+    var value_str = "";
+    
+    if(value != 0){
+        value_str += "<div class=\"letter-number\">";
+        value_str += value;
+        value_str += "</div>";
+    }
+
+    var card = "<div class=\"letter\">";
+    card += content;
+    card += value_str;
+    card += "</div>"
+
+    return card;
+}
+
+
 // applico il procedimento di somma degli estremi degli array sino a quando l'array risultante 
 // non avrà solo 2 cefre così potremo avere una percentuale 
-function sum_letter_occurrance(letter_count) {
+async function sum_letter_occurrance(letter_count) {
     var actual_sum = [];
 
     letter_count.forEach((element) => {
@@ -63,6 +82,7 @@ function sum_letter_occurrance(letter_count) {
     });
 
     do{
+        await sleep(700);
         actual_sum = sum_extremes(actual_sum);
         
         // =====================================================================================
@@ -138,4 +158,8 @@ function switch_names(){
 
 function reset_label(name){
     document.getElementById(name).value = "";
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
