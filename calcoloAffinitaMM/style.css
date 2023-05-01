@@ -19,6 +19,7 @@ html, body{
   height: 100vh;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
@@ -30,7 +31,7 @@ html, body{
 .main-div{
   background-color: rgba(0, 0, 0, 0.1);
 
-  height: 70vh;
+  width: 50vh;
   aspect-ratio: 6/8;
   position: relative;
 
@@ -167,6 +168,10 @@ html, body{
   font-size: 30px;
   
   border-radius: 10px;
+
+  animation: fadein 2s;
+  animation-fill-mode: forwards;
+  animation-delay: calc(var(--order) * 100ms);
 }
 
 .letter-number{
@@ -188,4 +193,41 @@ html, body{
 .calc-line{
   display: flex;
   flex-direction: row;
+}
+
+@keyframes fadein {
+  from {transform: translateY(-20px); 
+        opacity: 0; }
+  to   {transform: translateY(0); 
+        opacity: 1; }
+}
+
+#percentage-div{
+  background-color: rgba(0, 0, 0, 0.1);
+
+  display: flex;
+  align-items: center;
+
+  margin: 25px;
+  padding: 0 20px;
+  border-radius: 30px;
+
+  aspect-ratio: 7/1;
+  width: 50vh;
+}
+
+#percentage-bar{
+  background-color: var(--var-button-hover-color);
+
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+
+  height: 50%;
+  width: 0%;
+
+  padding: 0 10px;
+  border-radius: 30px;
+
+  transition: width 1s ease-in-out;
 }

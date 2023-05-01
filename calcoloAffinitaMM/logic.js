@@ -6,6 +6,13 @@ function submit_function() {
     var name_1 = document.getElementById("name1").value;
     var name_2 = document.getElementById("name2").value;
 
+    if((name_1 == "Antonio" && name_2 == "Anna pia") || (name_1 == "Anna pia" && name_2 == "Antonio")){
+        document.getElementById("percentage-bar").style.width= "101%";
+        document.getElementById("percentage-bar").innerHTML = "101%";
+        return;
+    }
+
+
     var names_string = name_1 + " " + name_2;
 
     calculate_letter_occurrance(names_string);
@@ -40,35 +47,42 @@ function calculate_letter_occurrance(names_string) {
     if(letter_count.size == 0)
         return;
 
-    // =======================================================================================
+    // ===================================================================
+    document.getElementById("calculation-div").innerHTML = "";
 
-    var str_letter_count = "";
+    const calcLine = document.createElement("div")
+    calcLine.classList.add("calc-line");
+
+    var i = 0;
     letter_count.forEach((value, key) => {
-        str_letter_count += create_card(key, value);
+        i++;
+
+        calcLine.appendChild(create_card(key, value, i));
     });
 
-    document.getElementById("calculation-div").innerHTML = "";
-    document.getElementById("calculation-div").innerHTML += "<div class=\"calc-line\">" + str_letter_count + "</div>";
-    // =======================================================================================
+    document.getElementById("calculation-div").appendChild(calcLine);
+    // ===================================================================
+
 
     sum_letter_occurrance(letter_count);
 }
 
-function create_card(content, value){
-    var value_str = "";
-    
-    if(value != 0){
-        value_str += "<div class=\"letter-number\">";
-        value_str += value;
-        value_str += "</div>";
+function create_card(content, value, num){
+    const letter = document.createElement("div");
+
+    letter.classList.add("letter");
+    letter.style.cssText += "--order: " + num + ";";
+    letter.innerHTML = content;
+
+    if(value > 0){
+        const ammount = document.createElement("div");
+        ammount.classList.add("letter-number");
+        ammount.innerHTML = value;
+
+        letter.appendChild(ammount);
     }
 
-    var card = "<div class=\"letter\">";
-    card += content;
-    card += value_str;
-    card += "</div>"
-
-    return card;
+    return letter;
 }
 
 
@@ -82,22 +96,29 @@ async function sum_letter_occurrance(letter_count) {
     });
 
     do{
-        await sleep(700);
+        await sleep(1000);
         actual_sum = sum_extremes(actual_sum);
         
         // =====================================================================================
-        var s = "";
+        const calcLine = document.createElement("div")
+        calcLine.classList.add("calc-line");
+
         actual_sum.forEach((element) => {
-            s += " " + element;
+            calcLine.appendChild(create_card(element, 0, 0))    
         });
 
-        var p = "";
-        if(actual_sum.length <= 2)
-        p = "%";
-
-        document.getElementById("calculation-div").innerHTML += "<p>" + s + p + "</p>";
+        document.getElementById("calculation-div").appendChild(calcLine);
         // =====================================================================================
     }while (actual_sum.length > 2);
+
+    var percentage = "";
+    actual_sum.forEach((element) => {
+        percentage += element;
+    });
+    percentage += "%";
+
+    document.getElementById("percentage-bar").style.width= percentage;
+    document.getElementById("percentage-bar").innerHTML = percentage;
 }
 
 // somma gli estremi degli array
