@@ -2,7 +2,7 @@
   --var-background-color : #372954;
   --var-text-color : rgb(242, 245, 234);
 
-  --var-button-color : rgb(255, 173, 187);
+  --var-button-color :  rgb(255, 71, 102);
   --var-button-hover-color : rgb(255, 71, 102);
 }
 
@@ -66,22 +66,6 @@ html, body{
   transform: translate(-50%, -50%);
 }
 
-.submit-div{
-  position: absolute;
-  bottom: 10px;
-
-  left:0;
-  right:0;
-
-  margin-left: auto;
-  margin-right: auto;
-
-  width: 100%;
-
-  display: flex;
-  justify-content: center;
-}
-
 .name-input{
   position: relative;
   border-radius: 10px;
@@ -118,7 +102,7 @@ html, body{
 }
 .glow-btn:hover{
   color: var(--var-button-hover-color);
-  text-shadow: 0 0 10px rgba(255, 71, 102, .4);
+  text-shadow: 0 0 15px rgba(255, 71, 102, 0.8);
 }
 .glow-btn:active{
   transform: rotate(180deg);
@@ -126,35 +110,13 @@ html, body{
 
 #calculation-div{
   margin-top: 20px;
+  overflow: auto;
 }
 
 #calculation-div * {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.submitt{
-  border: none;
-  width: 100%;
-
-  padding: 10px;
-  margin: 10px 20px;
-
-  border-radius: 10px;
-
-  background-color: var(--var-button-color);
-  color: var(--var-text-color);
-  transition: all 0.1s ease-in-out;
-}
-
-.submitt:hover{
-  background-color: var(--var-button-hover-color);
-  box-shadow: 0 0 10px rgba(255, 71, 102, .4);
-}
-
-.submitt:active{
-  transform: translateY(4px);
 }
 
 .letter{
@@ -172,6 +134,14 @@ html, body{
   animation: fadein 2s;
   animation-fill-mode: forwards;
   animation-delay: calc(var(--order) * 100ms);
+}
+
+
+@keyframes fadein {
+  from {transform: translateY(-20px); 
+        opacity: 0; }
+  to   {transform: translateY(0); 
+        opacity: 1; }
 }
 
 .letter-number{
@@ -195,12 +165,45 @@ html, body{
   flex-direction: row;
 }
 
-@keyframes fadein {
-  from {transform: translateY(-20px); 
-        opacity: 0; }
-  to   {transform: translateY(0); 
-        opacity: 1; }
+.submit-div{
+  position: absolute;
+  bottom: 10px;
+
+  left:0;
+  right:0;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
 }
+
+.submitt{
+  border: none;
+  width: 100%;
+
+  padding: 10px;
+  margin: 10px 20px;
+
+  border-radius: 10px;
+
+  background-color: var(--var-button-color);
+  color: var(--var-text-color);
+  transition: all 0.1s ease-in-out;
+}
+
+.submitt:hover{
+  background-color: var(--var-button-hover-color);
+  box-shadow: 0 0 15px rgba(255, 71, 102, .8);
+}
+
+.submitt:active{
+  transform: translateY(4px);
+}
+
 
 #percentage-div{
   background-color: rgba(0, 0, 0, 0.1);
@@ -224,7 +227,7 @@ html, body{
   flex-direction: row-reverse;
 
   height: 50%;
-  width: 0%;
+  width: 0px;
 
   padding: 0 10px;
   border-radius: 30px;
