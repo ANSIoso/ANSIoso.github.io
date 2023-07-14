@@ -1,1 +1,28 @@
+
+
+<dialog identity-modal>
+    <form>
+        <input type="text">
+        <button id = "check" type="submit">controlla</button>
+    </form>
+
+</dialog>
+
+<script>
+    const modal = document.querySelector("[identity-modal]")
+    const checkBtn = document.querySelector("#check")
+
+    window.onload = function() {
+        modal.showModal()
+    }
+
+    checkBtn.addEventListener("click", () => {
+        sendBack()
+    })
+
+    function sendBack(){
+        window.location.href("./anna.html")
+    }
+</script>
+
 halo everignam
