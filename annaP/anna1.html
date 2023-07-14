@@ -1,27 +1,43 @@
 
+<style>
+    dialog::backdrop {
+        backdrop-filter: blur(5px);
+    }
+</style>
 
 <dialog identity-modal>
-    <form>
-        <input type="text">
-        <button id = "check" type="submit">controlla</button>
-    </form>
-
+    <span> Unico piatto non mangiato da Anna P?</span>
+    <input id = "answer" type="text">
+    <button id = "check">Controlla</button>
 </dialog>
+
 
 <script>
     const modal = document.querySelector("[identity-modal]")
+    const modalAnswer = document.querySelector("#answer")
     const checkBtn = document.querySelector("#check")
 
     window.onload = function() {
         modal.showModal()
     }
 
+    document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'visible') {
+                modal.showModal()
+            }
+        });
+    });
+
     checkBtn.addEventListener("click", () => {
-        sendBack()
+        if(modalAnswer.value != "pesto" && modalAnswer.value != "Pesto")
+            sendBack()
+
+        modal.close()
     })
 
     function sendBack(){
-        window.location.href("./anna.html")
+        window.location.href = '../index.html'
     }
 </script>
 
