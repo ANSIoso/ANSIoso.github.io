@@ -154,10 +154,10 @@ async function main() {
 	// compiles and links the shaders, looks up attribute and uniform locations
 	const meshProgramInfo = webglUtils.createProgramInfo(gl, ['3d-vertex-shader', '3d-fragment-shader']);
 
-	const objHrefG = '../models/cat/12221_Cat_v1_l3.obj';
+	const objHrefG = './models/cat/12221_Cat_v1_l3.obj';
 	var gatto = await loadGeneralObj(objHrefG);
 
-	const objHrefP = '../models_blender/rock_slab/slab.obj';
+	const objHrefP = './models/rock_slab/slab.obj';
 	var pavimento = await loadGeneralObj(objHrefP);
 
 	function render(time) {
