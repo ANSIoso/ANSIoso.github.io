@@ -18,19 +18,25 @@
 </head>
 
 <body>
-
-	<h1>Non funzionante git hub pages non supporta pagine dinamiche, a quanto pare questa lo è 😭</h1>
-
 	<canvas id="canvas" width="800" height="600"></canvas>
+
+	<p> camera x <input id="slider_cameraX" type="range" min="-150" max="150"></p>
+	<p> camera y <input id="slider_cameraY" type="range" min="1" max="100"></p>
+
+	<hr>
+
+	<p> proj width <input id="projWidth" type="range" min="0" max="5" step="0.01"></p>
+	<p> proj height <input id="projHeight" type="range" min="0" max="5" step="0.01"></p>
+	<p> FoV <input id="fov" type="range" min="1" max="179" step="1"></p>
 
 	<script src="https://webglfundamentals.org/webgl/resources/webgl-utils.js"></script>
 	<script src="https://webglfundamentals.org/webgl/resources/m4.js"></script>
 
 	<script id="3d-vertex-shader" type="x-shader/x-vertex">
         attribute vec4 a_position;
+		attribute vec2 a_texcoord;
 		attribute vec3 a_normal;
 		attribute vec3 a_tangent;
-		attribute vec2 a_texcoord;
 		attribute vec4 a_color;
 
 		uniform mat4 u_projection;
@@ -44,9 +50,15 @@
 		varying vec2 v_texcoord;
 		varying vec4 v_color;
 
+		// proiezione
+		uniform mat4 u_textureMatrix;
+		varying vec4 v_projectedTexcoord;
+
 		void main() {
 			vec4 worldPosition = u_world * a_position;
 			gl_Position = u_projection * u_view * worldPosition;
+
+			
 			v_surfaceToView = u_viewWorldPosition - worldPosition.xyz;
 			mat3 normalMat = mat3(u_world);
 			v_normal = normalize(normalMat * a_normal);
@@ -54,17 +66,24 @@
 
 			v_texcoord = a_texcoord;
 			v_color = a_color;
+
+			// codice proiezione
+			v_projectedTexcoord = u_textureMatrix * worldPosition;
 		}
     </script>
 
 	<script id="3d-fragment-shader" type="x-shader/x-fragment">
 		precision highp float;
 
+		varying vec2 v_texcoord;
 		varying vec3 v_normal;
 		varying vec3 v_tangent;
 		varying vec3 v_surfaceToView;
-		varying vec2 v_texcoord;
 		varying vec4 v_color;
+
+		// proiezione
+		varying vec4 v_projectedTexcoord;
+		uniform sampler2D u_projectedTexture;
 
 		uniform vec3 diffuse;
 		uniform sampler2D diffuseMap;
@@ -99,12 +118,29 @@
 			vec3 effectiveDiffuse = diffuse * diffuseMapColor.rgb * v_color.rgb;
 			float effectiveOpacity = opacity * diffuseMapColor.a * v_color.a;
 
-			gl_FragColor = vec4(
+
+
+
+			// codice proiezione
+			// divide by w to get the correct value. See article on perspective
+			vec3 projectedTexcoord = v_projectedTexcoord.xyz / v_projectedTexcoord.w;
+			
+			bool inRange = 
+				projectedTexcoord.x >= 0.0 &&
+				projectedTexcoord.x <= 1.0 &&
+				projectedTexcoord.y >= 0.0 &&
+				projectedTexcoord.y <= 1.0;
+
+			vec4 projectedTexColor = texture2D(u_projectedTexture, projectedTexcoord.xy);
+			vec4 texColor = vec4(
 				emissive +
 				ambient * u_ambientLight +
 				effectiveDiffuse * fakeLight +
 				effectiveSpecular * pow(specularLight, shininess),
 				effectiveOpacity);
+
+			float projectedAmount = inRange ? 1.0 : 0.0;
+			gl_FragColor = mix(texColor, projectedTexColor, projectedAmount);
 		}
 	</script>
 
