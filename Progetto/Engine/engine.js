@@ -50,8 +50,8 @@ class Engine {
     // =============== cose da disegnare ================
     obj = {};       // contiene tutte le mash utilizzabili
     game;           // contiene il gioco esso ha le info su:
-                    // - quali mash renderizzare
-                    // - dove renderizzarle
+    // - quali mash renderizzare
+    // - dove renderizzarle
 
 
     // ==================== METODI ======================
@@ -82,7 +82,7 @@ class Engine {
         // console.log('Shader compiler log: ' + compilationLog);
 
         this.setUpDefoultObjInfo();
-        
+
         this.setDepthTexture();
 
         // imposto le informazioni necessarie a creare la skybox
@@ -190,27 +190,27 @@ class Engine {
         const faceInfos = [
             {
                 target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_X,
-                url: './skybox/px.jpg',
+                url: './skybox/testSkybox/px.jpg',
             },
             {
                 target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
-                url: './skybox/nx.jpg',
+                url: './skybox/testSkybox/nx.jpg',
             },
             {
                 target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
-                url: './skybox/py.jpg',
+                url: './skybox/testSkybox/py.jpg',
             },
             {
                 target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
-                url: './skybox/ny.jpg',
+                url: './skybox/testSkybox/ny.jpg',
             },
             {
                 target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
-                url: './skybox/pz.jpg',
+                url: './skybox/testSkybox/pz.jpg',
             },
             {
                 target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
-                url: './skybox/nz.jpg',
+                url: './skybox/testSkybox/nz.jpg',
             },
         ];
         faceInfos.forEach((faceInfo) => {
@@ -383,8 +383,8 @@ class Engine {
 
 
         // posiziono la luce al fianco della camera
-        this.lightTransform.transformMatrix = m4.copy(this.viewTransform.transformMatrix);
-        this.lightTransform.translate(10, 10, 0);
+        this.lightTransform.transformMatrix = m4.copy(this.viewTransform.getMatrix());
+        this.lightTransform.translate(10, 0, 0);
         this.lightTransform.rotate(degToRad(-15), 0, 0);
         // posiziono la luce dove il transform indica
         this.lightWorldMatrix = this.lightTransform.transformMatrix;
@@ -400,7 +400,7 @@ class Engine {
             this.viewFar);
 
         // posiziono il punto di vista dove il transform indica
-        this.viewMatrix = this.viewTransform.transformMatrix;
+        this.viewMatrix = this.viewTransform.getMatrix();
     }
 
     // disegna la scena
@@ -535,21 +535,24 @@ class Engine {
 
     async load() {
 
-        this.obj["terreno"] = await this.loadGeneralObj('./objs/grass_slab/grass_slab.obj');
-        // this.obj["terreno"] = await this.loadGeneralObj('../../models/grass1/10450_Rectangular_Grass_Patch_v1_iterations-2.obj');
+        this.obj["terreno"] = await this.loadGeneralObj('./modelsOBJ/grass_slab/grass_slab.obj');
 
-        this.obj["gatto"] = await this.loadGeneralObj('./objs/cat/12221_Cat_v1_l3.obj');
+        this.obj["gatto"] = await this.loadGeneralObj('./modelsOBJ/cat/12221_Cat_v1_l3.obj');
+
+        for (let index = 1; index <= 5; index++) {
+            let treeName = "albero" + index;
+
+            this.obj[treeName] = await this.loadGeneralObj('./modelsOBJ/alberi/' + treeName + '.obj');
+        }
+
+        for (let index = 1; index <= 7; index++) {
+            let rockName = "roccia" + index;
+
+            this.obj[rockName] = await this.loadGeneralObj('./modelsOBJ/rocce/' + rockName + '.obj');
+        }
 
 
         this.render();
     }
 
 }
-
-const canvas = document.getElementById("canvas")
-
-const game = new Game();
-
-const engine = new Engine(canvas, game);
-
-engine.load();

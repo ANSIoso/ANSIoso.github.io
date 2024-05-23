@@ -1,6 +1,3 @@
-const lerp = (start, end, speed) => start + (end - start) * speed
-
-
 class Controller {
     KEY_CODES = {
         W: 87,
@@ -21,15 +18,24 @@ class Controller {
     aKey;
     dKey;
 
-    //
-    shiftKey;
+    // altri comandi
+    shiftKey; // - corsa
 
-    constructor() {
+    // variabili usate per interazione da telefono
+    touch;
+    previousTouch;
 
-        //fix
-        canvas.addEventListener('click', () => {
-            canvas.requestPointerLock();
-        });
+
+    // elementi influenzati dal controller
+    game;
+    canvas;
+
+    turningSensitivity = 20;
+
+    constructor(canvas, game) {
+        this.canvas = canvas;
+        this.game = game;
+
 
         this.xStik = 0;
         this.yStik = 0;
@@ -44,16 +50,36 @@ class Controller {
         this.setFuncion();
     }
 
+    // impostiamo l'effetto che i comandi hanno
     setFuncion() {
 
         let self = this;
 
+        // ==== movimenti della testa del giocatore ====
+        // - da computer con il mouse
         window.addEventListener('mousemove', function (e) {
-            console.log(e.movementX);
-
-            game.playerTurnHead(e.movementX, e.movementY)
+            self.game.playerTurnHead(-e.movementX / self.turningSensitivity, -e.movementY / self.turningSensitivity)
         })
 
+        // - da telefono con il touch
+        window.addEventListener('touchmove', function (e) {
+            self.touch = e.touches[0];
+
+            if (self.previousTouch) {
+                e.movementX = self.touch.pageX - self.previousTouch.pageX;
+                e.movementY = self.touch.pageY - self.previousTouch.pageY;
+
+                self.game.playerTurnHead(e.movementX / self.turningSensitivity, e.movementY / self.turningSensitivity)
+            };
+
+            self.previousTouch = self.touch;
+        })
+
+        canvas.addEventListener("touchend", (e) => {
+            self.previousTouch = null;
+        });
+
+        // ==== movimento corpo del giocatore ====
         window.onkeyup = function (e) {
             switch (e.keyCode) {
                 case self.KEY_CODES.W:
@@ -91,25 +117,31 @@ class Controller {
                 case self.KEY_CODES.SHIFT:
                     self.shiftKey = true;
                     break;
-                case self.KEY_CODES.ESCAPE:
-                    //fix
-                    canvas.releasePointerCapture();
-                    break
             }
         };
+
+        this.canvas.addEventListener('click', () => {
+            self.canvas.requestPointerLock();
+        });
     }
 
+    // loop che viene eseguito a ogni tick
     loop() {
+        // controllo inclinazione stick virtuale sull'asse y
         this.yStik = this.inclineStik(this.wKey, this.sKey, this.yStik);
+        // controllo inclinazione stick virtuale sull'asse x
         this.xStik = this.inclineStik(this.dKey, this.aKey, this.xStik);
 
+        // approssimo i valori degli stick virtuale in modo che stiano sempre tra -1 e 1
         this.yStik = this.roundStick(this.yStik);
         this.xStik = this.roundStick(this.xStik);
 
+        // imprimo i comandi del controller nel game
         game.playerWalk(this.xStik, -this.yStik);
         game.setPlayerRunning(this.shiftKey);
     }
 
+    // tiene conto dell'inclinazione dello "stick virtuale"
     inclineStik(positive, negative, value) {
         if (positive || negative) {
             if (positive)
@@ -122,6 +154,7 @@ class Controller {
         return value;
     }
 
+    // arrotondo i valori presi dallo stick virtuale
     roundStick(value) {
         if (value >= 0.99)
             value = 1
@@ -134,4 +167,12 @@ class Controller {
     }
 }
 
-const controller = new Controller();
+const canvas = document.getElementById("canvas")
+
+const game = new Game();
+
+const engine = new Engine(canvas, game);
+
+const controller = new Controller(canvas, game);
+
+engine.load();
