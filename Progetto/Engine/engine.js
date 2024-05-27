@@ -2,6 +2,7 @@ class Engine {
 
     // == variabili usate per funzionamento base webgl ==
     gl;
+    ctx;
     ext;
 
     // - shader programs
@@ -55,11 +56,18 @@ class Engine {
 
 
     // ==================== METODI ======================
-    constructor(canvas, game) {
+    constructor(canvas, uiCanvas, game) {
         this.game = game;
 
         this.gl = canvas.getContext("webgl");
         if (!this.gl) {
+            console.log("Errore caricamento webgl");
+            return;
+        }
+
+        this.ctx = uiCanvas.getContext("2d");
+        if (!this.gl) {
+            console.log("Errore caricamento ctx");
             return;
         }
 
@@ -525,6 +533,10 @@ class Engine {
 
         this.drawSkybox();
 
+        // pulisco il canvas della ui
+        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.drawStaminaBar()
+
         //loop
         this.game.updateStatus();
         controller.loop();
@@ -532,12 +544,29 @@ class Engine {
         requestAnimationFrame(this.render.bind(this));
     }
 
+    // metodi utilizzati per il disegno della ui
+    drawStaminaBar() {
+        this.ctx.strokeStyle = "white";
+        this.ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+
+        let start = 4;
+        let fullBarWidth = 50;
+        let fullBarHeight = 4;
+
+        // F : X = MS : S
+
+        let pixelToFill = (fullBarWidth * this.game.playerStamina) / this.game.playerStaminaMax;
+
+        this.ctx.strokeRect(start, start, fullBarWidth + 2, start + fullBarHeight);
+        this.ctx.fillRect(start + 1, start + 1, pixelToFill, start + fullBarHeight - 2);
+    }
+
 
     async load() {
 
         this.obj["terreno"] = await this.loadGeneralObj('./modelsOBJ/grass_slab/grass_slab.obj');
 
-        this.obj["gatto"] = await this.loadGeneralObj('./modelsOBJ/cat/12221_Cat_v1_l3.obj');
+        this.obj["fantasma"] = await this.loadGeneralObj('./modelsOBJ/fantasma/fantasma.obj');
 
         for (let index = 1; index <= 5; index++) {
             let treeName = "albero" + index;
@@ -551,6 +580,7 @@ class Engine {
             this.obj[rockName] = await this.loadGeneralObj('./modelsOBJ/rocce/' + rockName + '.obj');
         }
 
+        this.obj["totem"] = await this.loadGeneralObj('./modelsOBJ//mio_totem/mio.obj');
 
         this.render();
     }

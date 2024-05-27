@@ -29,11 +29,14 @@ class Controller {
     // elementi influenzati dal controller
     game;
     canvas;
+    uiCanvas;
 
     turningSensitivity = 20;
 
-    constructor(canvas, game) {
+    constructor(canvas, uiCanvas, game) {
         this.canvas = canvas;
+        this.uiCanvas = uiCanvas;
+
         this.game = game;
 
 
@@ -60,24 +63,6 @@ class Controller {
         window.addEventListener('mousemove', function (e) {
             self.game.playerTurnHead(-e.movementX / self.turningSensitivity, -e.movementY / self.turningSensitivity)
         })
-
-        // - da telefono con il touch
-        window.addEventListener('touchmove', function (e) {
-            self.touch = e.touches[0];
-
-            if (self.previousTouch) {
-                e.movementX = self.touch.pageX - self.previousTouch.pageX;
-                e.movementY = self.touch.pageY - self.previousTouch.pageY;
-
-                self.game.playerTurnHead(e.movementX / self.turningSensitivity, e.movementY / self.turningSensitivity)
-            };
-
-            self.previousTouch = self.touch;
-        })
-
-        canvas.addEventListener("touchend", (e) => {
-            self.previousTouch = null;
-        });
 
         // ==== movimento corpo del giocatore ====
         window.onkeyup = function (e) {
@@ -120,9 +105,83 @@ class Controller {
             }
         };
 
-        this.canvas.addEventListener('click', () => {
+        this.uiCanvas.addEventListener('click', () => {
+            if (window.innerWidth < 1300)
+                return;
+
             self.canvas.requestPointerLock();
         });
+
+        this.setUpPhoneControls();
+    }
+
+    setUpPhoneControls() {
+        let self = this;
+
+        // - definisco funzionamento trascinamento dita su schermo
+        window.addEventListener('touchmove', function (e) {
+            self.touch = e.touches[0];
+
+            if (self.previousTouch) {
+                e.movementX = self.touch.pageX - self.previousTouch.pageX;
+                e.movementY = self.touch.pageY - self.previousTouch.pageY;
+
+                self.game.playerTurnHead(e.movementX / self.turningSensitivity, e.movementY / self.turningSensitivity)
+            };
+
+            self.previousTouch = self.touch;
+        })
+
+        window.addEventListener("touchend", (e) => {
+            self.previousTouch = null;
+        });
+
+        // - definisco funzionamento tasti a schermo su telefono
+        var runBtn = document.getElementById("run-btn");
+        var lightBtn = document.getElementById("run-btn");
+
+        
+        runBtn.ontouchstart = function () {
+            self.shiftKey = true;
+        }
+        runBtn.ontouchend = function () {
+            self.shiftKey = false;
+        }
+
+
+        var straightBtn = document.getElementById("straight-btn");
+        var backBtn = document.getElementById("back-btn");
+        var leftBtn = document.getElementById("left-btn");
+        var rightBtn = document.getElementById("right-btn");
+
+        // straightBtn
+        straightBtn.ontouchstart = function () {
+            self.wKey = true;
+        }
+        straightBtn.ontouchend = function () {
+            self.wKey = false;
+        }
+        // backBtn
+        backBtn.ontouchstart = function () {
+            self.sKey = true;
+        }
+        backBtn.ontouchend = function () {
+            self.sKey = false;
+        }
+        // leftBtn
+        leftBtn.ontouchstart = function () {
+            self.aKey = true;
+        }
+        leftBtn.ontouchend = function () {
+            self.aKey = false;
+        }
+        // rightBtn
+        rightBtn.ontouchstart = function () {
+            self.dKey = true;
+        }
+        rightBtn.ontouchend = function () {
+            self.dKey = false;
+        }
     }
 
     // loop che viene eseguito a ogni tick
@@ -167,12 +226,13 @@ class Controller {
     }
 }
 
-const canvas = document.getElementById("canvas")
+const canvas = document.getElementById("canvas");
+const uiCanvas = document.getElementById("uiCanvas");
 
 const game = new Game();
 
-const engine = new Engine(canvas, game);
+const engine = new Engine(canvas, uiCanvas, game);
 
-const controller = new Controller(canvas, game);
+const controller = new Controller(canvas, uiCanvas, game);
 
 engine.load();

@@ -11,24 +11,104 @@
 			background-color: rgb(54, 53, 53);
 		}
 
-		#canvas {
-			background-color: rgb(51, 50, 50);
+		.container {
+			position: relative;
+
 			width: 1280px;
 			height: 720px;
 		}
 
-		@media only screen and (max-width: 600px) {
-			#canvas {
-				width: 100%;
-				height: 100vh;
-			}
+		.monitor {
+			position: absolute;
+			left: 0px;
+			right: 0px;
+
+			width: 100%;
+			height: 100%;
 		}
 
+		#uiCanvas {
+			z-index: 9;
+		}
+
+		#canvas {
+			background-color: rgb(51, 50, 50);
+		}
+
+		.controls {
+			display: none;
+
+			position: absolute;
+			z-index: 10;
+		}
+
+		.controlsButton {
+			min-width: 80px;
+			min-height: 80px;
+			opacity: 0.2;
+
+			font-size: 30px;
+		}
+
+		.controlsButton:active{
+			background-color: brown;
+		}
+
+		.controlsLine {
+			width: 100%;
+			text-align: center;
+		}
+
+		#leftControls {
+			left: 10px;
+			bottom: 4px;
+		}
+
+		#rightControls {
+			right: 10px;
+			bottom: 4px;
+		}
+
+		@media only screen and (max-width: 1000px) {
+			.controls {
+				display: inline;
+			}
+
+			#container {
+				width: 100%;
+				height: 50%;
+			}
+		}
 	</style>
 </head>
 
 <body>
-	<canvas id="canvas"></canvas>
+	<div class="container">
+		<canvas id="canvas" class="monitor"></canvas>
+		<canvas id="uiCanvas" class="monitor"></canvas>
+
+		<div class="controls" id="leftControls">
+			<p class="controlsLine">
+				<button id="straight-btn" class="controlsButton"><i class="fa-solid fa-up-long"></i></button>
+			</p>
+			<p class="controlsLine">
+				<button id="left-btn" class="controlsButton"><i class="fa-solid fa-left-long"></i></button>
+				<button id="back-btn" class="controlsButton"><i class="fa-solid fa-down-long"></i></button>
+				<button id="right-btn" class="controlsButton"><i class="fa-solid fa-right-long"></i></button>
+			</p>
+		</div>
+
+		<div class="controls" id="rightControls">
+			<p>
+				<button id="run-btn" class="controlsButton"><i class="fa-solid fa-person-running"></i></button>
+			</p>
+			<p>
+				<button id="light-btn" class="controlsButton"><i class="fa-solid fa-lightbulb"></i></button>
+			</p>
+		</div>
+	</div>
+
+	<script src="https://kit.fontawesome.com/06d84ce8cf.js" crossorigin="anonymous"></script>
 
 	<script id="3d-vertex-shader" type="x-shader/x-vertex">
         attribute vec4 a_position;
