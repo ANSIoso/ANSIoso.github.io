@@ -39,19 +39,21 @@
 			display: none;
 
 			position: absolute;
+			bottom: 0px;
+
 			z-index: 10;
 		}
 
 		.controlsButton {
-			min-width: 80px;
-			min-height: 80px;
+			min-width: 50px;
+			min-height: 50px;
 			opacity: 0.2;
 
 			font-size: 30px;
 		}
 
-		.controlsButton:active{
-			background-color: brown;
+		.controlsButton:active {
+			background-color: black;
 		}
 
 		.controlsLine {
@@ -61,12 +63,15 @@
 
 		#leftControls {
 			left: 10px;
-			bottom: 4px;
 		}
 
 		#rightControls {
 			right: 10px;
-			bottom: 4px;
+		}
+
+		#upControls {
+			top: 0;
+			right: 10px;
 		}
 
 		@media only screen and (max-width: 1000px) {
@@ -83,9 +88,15 @@
 </head>
 
 <body>
-	<div class="container">
+	<div id="gameDiv" class="container">
 		<canvas id="canvas" class="monitor"></canvas>
 		<canvas id="uiCanvas" class="monitor"></canvas>
+
+		<div class="controls" id="upControls">
+			<p>
+				<button id="fullScreen-btn" class="controlsButton"><i class="fa-solid fa-expand"></i></button>
+			</p>
+		</div>
 
 		<div class="controls" id="leftControls">
 			<p class="controlsLine">

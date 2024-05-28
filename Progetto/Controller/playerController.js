@@ -4,6 +4,7 @@ class Controller {
         A: 65,
         S: 83,
         D: 68,
+        F: 70,
         SHIFT: 16,
         ESCAPE: 27
     };
@@ -31,13 +32,19 @@ class Controller {
     canvas;
     uiCanvas;
 
+    gameDiv;
+    fullScreen;
+
     turningSensitivity = 20;
 
-    constructor(canvas, uiCanvas, game) {
+    constructor(canvas, uiCanvas, gameDiv, game) {
         this.canvas = canvas;
         this.uiCanvas = uiCanvas;
 
         this.game = game;
+
+        this.gameDiv = gameDiv;
+        this.fullScreen = false;
 
 
         this.xStik = 0;
@@ -51,6 +58,16 @@ class Controller {
         this.shiftKey = false;
 
         this.setFuncion();
+    }
+
+    toggleFullScreen(){
+        if(this.fullScreen){
+            document.exitFullscreen();
+            this.fullScreen = false;
+        }else{
+            this.gameDiv.requestFullscreen();
+            this.fullScreen = true;
+        }
     }
 
     // impostiamo l'effetto che i comandi hanno
@@ -102,6 +119,9 @@ class Controller {
                 case self.KEY_CODES.SHIFT:
                     self.shiftKey = true;
                     break;
+                case self.KEY_CODES.F:
+                    self.toggleFullScreen();
+                    break;
             }
         };
 
@@ -136,11 +156,13 @@ class Controller {
             self.previousTouch = null;
         });
 
-        // - definisco funzionamento tasti a schermo su telefono
+        // === definisco funzionamento tasti a schermo su telefono ===
+
+        // - tasti azione
         var runBtn = document.getElementById("run-btn");
         var lightBtn = document.getElementById("run-btn");
 
-        
+
         runBtn.ontouchstart = function () {
             self.shiftKey = true;
         }
@@ -148,7 +170,7 @@ class Controller {
             self.shiftKey = false;
         }
 
-
+        // - tasti movimento
         var straightBtn = document.getElementById("straight-btn");
         var backBtn = document.getElementById("back-btn");
         var leftBtn = document.getElementById("left-btn");
@@ -182,6 +204,12 @@ class Controller {
         rightBtn.ontouchend = function () {
             self.dKey = false;
         }
+
+        // - tasto fullScreen
+        var fullScreenBtn = document.getElementById("fullScreen-btn");
+        fullScreenBtn.addEventListener('click', () => {
+            self.toggleFullScreen();
+        });
     }
 
     // loop che viene eseguito a ogni tick
@@ -228,11 +256,12 @@ class Controller {
 
 const canvas = document.getElementById("canvas");
 const uiCanvas = document.getElementById("uiCanvas");
+const gameDiv = document.getElementById("gameDiv");
 
 const game = new Game();
 
 const engine = new Engine(canvas, uiCanvas, game);
 
-const controller = new Controller(canvas, uiCanvas, game);
+const controller = new Controller(canvas, uiCanvas, gameDiv, game);
 
 engine.load();
