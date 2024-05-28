@@ -51,7 +51,7 @@ class CameraTransform {
         this.xAngle = 0;
         this.yAngle = 0;
 
-        this.transformMatrix = m4.identity();
+        this.transformMatrix = m4.translation(0,0,40);
     }
 
     // metodo utilizzato per traslare il giocatore 
@@ -139,6 +139,11 @@ class Game {
     playerStamina;
     playerStaminaMax = 100;
 
+    torchStatus;
+    torchLight;
+    torchMaxLight = 0.9;
+
+
     // variabili utilizzate per tenere conto del comportamento delle entità
     entities = [];      // matrici trasformazione
     entitiesPerceptionDistance = 300;
@@ -172,17 +177,19 @@ class Game {
         this.player = new CameraTransform();
         this.playerRunning = false;
         this.playerStamina = this.playerStaminaMax;
+        
+        this.torchStatus = false;
+        this.torchLight = 0;
 
+        // var t = new Transform();
+        // t.translate(110, 5, 0);
+        // t.scale(5, 5, 5)
+        // t.rotate(0, degToRad(-90), 0);
 
-        var t = new Transform();
-        t.translate(110, 5, 0);
-        t.scale(5, 5, 5)
-        t.rotate(0, degToRad(-90), 0);
-
-        this.entities.push({
-            transform: t,
-            modelID: "fantasma"
-        })
+        // this.entities.push({
+        //     transform: t,
+        //     modelID: "fantasma"
+        // })
     }
 
     // ==== metodi settaggi iniziali ====
@@ -192,8 +199,9 @@ class Game {
         this.positionRocks();
 
         var t = new Transform();
-        t.translate(0, 5, 0);
-        t.scale(5, 5, 5);
+        t.translate(0, 0, 0);
+        t.rotate(0,degToRad(90), 0);
+        t.scale(4, 4, 4);
         
         this.terrain.push({
             transform: t,
@@ -352,7 +360,26 @@ class Game {
         this.playerRunning = isRunning;
     }
 
+    toggleTorch(){
+        this.torchStatus = this.torchStatus ? false : true;
+    }
+
+    updateTorch(){
+        console.log(this.torchStatus);
+        if (!this.torchStatus) {
+            this.torchLight = 0;
+            return;
+        }
+
+        if(this.torchLight > this.torchMaxLight)
+            return;
+
+        this.torchLight += 0.01;
+    }
+
     updateStatus() {
+        this.updateTorch();
+
         // aggiorno lo stato del giocatore
         if (this.playerRunning) {
             if (this.playerStamina <= 0)

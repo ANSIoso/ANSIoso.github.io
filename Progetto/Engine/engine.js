@@ -393,7 +393,7 @@ class Engine {
         // posiziono la luce al fianco della camera
         this.lightTransform.transformMatrix = m4.copy(this.viewTransform.getMatrix());
         this.lightTransform.translate(10, 0, 0);
-        this.lightTransform.rotate(degToRad(-15), 0, 0);
+        this.lightTransform.rotate(degToRad(-10 ), 0, 0);
         // posiziono la luce dove il transform indica
         this.lightWorldMatrix = this.lightTransform.transformMatrix;
     }
@@ -427,6 +427,8 @@ class Engine {
             u_bias: this.bias,
             u_textureMatrix: textureMatrix,
             u_projectedTexture: this.depthTexture,
+
+            lightPower: this.game.torchLight,
 
             u_innerLimit: Math.cos(degToRad(this.lightFOV / 2 - this.lightGradient)),
             u_outerLimit: Math.cos(degToRad(this.lightFOV / 2)),
@@ -551,7 +553,7 @@ class Engine {
 
         let start = 4;
         let fullBarWidth = 50;
-        let fullBarHeight = 4;
+        let fullBarHeight = 2;
 
         // F : X = MS : S
 
@@ -580,7 +582,7 @@ class Engine {
             this.obj[rockName] = await this.loadGeneralObj('./modelsOBJ/rocce/' + rockName + '.obj');
         }
 
-        this.obj["totem"] = await this.loadGeneralObj('./modelsOBJ//mio_totem/mio.obj');
+        this.obj["totem"] = await this.loadGeneralObj('./modelsOBJ/mio_totem/mio.obj');
 
         this.render();
     }

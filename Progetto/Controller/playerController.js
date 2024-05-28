@@ -35,7 +35,8 @@ class Controller {
     gameDiv;
     fullScreen;
 
-    turningSensitivity = 20;
+    turningSensitivityMouse = 20;
+    turningSensitivityTouch = 10;
 
     constructor(canvas, uiCanvas, gameDiv, game) {
         this.canvas = canvas;
@@ -60,11 +61,11 @@ class Controller {
         this.setFuncion();
     }
 
-    toggleFullScreen(){
-        if(this.fullScreen){
+    toggleFullScreen() {
+        if (this.fullScreen) {
             document.exitFullscreen();
             this.fullScreen = false;
-        }else{
+        } else {
             this.gameDiv.requestFullscreen();
             this.fullScreen = true;
         }
@@ -78,7 +79,7 @@ class Controller {
         // ==== movimenti della testa del giocatore ====
         // - da computer con il mouse
         window.addEventListener('mousemove', function (e) {
-            self.game.playerTurnHead(-e.movementX / self.turningSensitivity, -e.movementY / self.turningSensitivity)
+            self.game.playerTurnHead(-e.movementX / self.turningSensitivityMouse, -e.movementY / self.turningSensitivityMouse)
         })
 
         // ==== movimento corpo del giocatore ====
@@ -132,6 +133,10 @@ class Controller {
             self.canvas.requestPointerLock();
         });
 
+        this.canvas.addEventListener('mousedown', (e) => {
+            self.game.toggleTorch();
+        })
+
         this.setUpPhoneControls();
     }
 
@@ -140,13 +145,13 @@ class Controller {
 
         // - definisco funzionamento trascinamento dita su schermo
         window.addEventListener('touchmove', function (e) {
-            self.touch = e.touches[0];
+            self.touch = e.touches[e.touches.length - 1];
 
             if (self.previousTouch) {
                 e.movementX = self.touch.pageX - self.previousTouch.pageX;
                 e.movementY = self.touch.pageY - self.previousTouch.pageY;
 
-                self.game.playerTurnHead(e.movementX / self.turningSensitivity, e.movementY / self.turningSensitivity)
+                self.game.playerTurnHead(e.movementX / self.turningSensitivityTouch, e.movementY / self.turningSensitivityTouch)
             };
 
             self.previousTouch = self.touch;
@@ -160,14 +165,17 @@ class Controller {
 
         // - tasti azione
         var runBtn = document.getElementById("run-btn");
-        var lightBtn = document.getElementById("run-btn");
-
+        var lightBtn = document.getElementById("light-btn");
 
         runBtn.ontouchstart = function () {
             self.shiftKey = true;
         }
         runBtn.ontouchend = function () {
             self.shiftKey = false;
+        }
+
+        lightBtn.ontouchstart = function () {
+            self.game.toggleTorch();
         }
 
         // - tasti movimento

@@ -182,7 +182,10 @@
 		varying vec3 v_surfaceToView;
 
 		varying vec3 v_tangent;
-		
+
+
+		uniform float lightPower;
+
 		
 		varying vec4 v_color; //u_colorMult
 		uniform sampler2D diffuseMap; //u_texture
@@ -229,8 +232,8 @@
 			float dotFromDirection = dot(surfaceToLightDirection,
                                -u_lightDirection);
 			float limitRange = u_innerLimit - u_outerLimit;
-			float inLight = clamp((dotFromDirection - u_outerLimit) / limitRange, 0.1, 1.0); // |modificare qui per indicare
-			float light = inLight * dot(normal, surfaceToLightDirection);                    // |oscurità fuori dal cono di luce
+			float inLight = clamp((dotFromDirection - u_outerLimit) / limitRange, 0.05, lightPower); // |modificare qui per indicare
+			float light = inLight * dot(normal, surfaceToLightDirection);                     		 // |oscurità fuori dal cono di luce
 
 			// codice proiezione
 			// divide by w to get the correct value. See article on perspective
