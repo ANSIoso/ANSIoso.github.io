@@ -1,0 +1,77 @@
+body {
+    background-color: rgb(54, 53, 53);
+}
+
+.container {
+    position: relative;
+
+    width: 1280px;
+    height: 720px;
+}
+
+.monitor {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+
+    width: 100%;
+    height: 100%;
+}
+
+#uiCanvas {
+    z-index: 9;
+}
+
+#canvas {
+    background-color: rgb(51, 50, 50);
+}
+
+.controls {
+    display: none;
+
+    position: absolute;
+    bottom: 0px;
+
+    z-index: 10;
+}
+
+.controlsButton {
+    min-width: 50px;
+    min-height: 50px;
+    opacity: 0.2;
+
+    font-size: 30px;
+}
+
+.controlsButton:active {
+    background-color: black;
+}
+
+.controlsLine {
+    width: 100%;
+    text-align: center;
+}
+
+#leftControls {
+    left: 10px;
+}
+
+#rightControls {
+    right: 10px;
+}
+
+#upControls {
+    top: 0;
+    right: 10px;
+}
+
+@media only screen and (max-width: 1000px) {
+    .controls {
+        display: inline;
+    }
+
+    #container {
+        width: 100%;
+        height: 50%;
+    }
+}

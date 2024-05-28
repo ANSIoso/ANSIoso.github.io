@@ -1,130 +1,3 @@
-const lerp = (start, end, speed) => start + (end - start) * speed
-
-// classe utilizzata per tener conto della matrice di trasformazione di tutti gli oggetti
-class Transform {
-    transformMatrix;
-    // una matrice m4 è così ordinata
-    //  0 |  4 |  8 | 12
-    // ------------------
-    //  1 |  5 |  9 | 13
-    // ------------------
-    //  2 |  6 | 10 | 14
-    // ------------------
-    //  3 |  7 | 11 | 15
-
-    constructor(matrixToCopy) {
-        if (matrixToCopy === undefined)
-            this.transformMatrix = m4.identity();
-        else
-            this.transformMatrix = m4.copy(matrixToCopy);
-    }
-
-    translate(xTransl, yTransl, zTransl) {
-        m4.translate(this.transformMatrix, xTransl, yTransl, zTransl, this.transformMatrix);
-    }
-
-    rotate(xRotate, yRotate, zRotate) {
-        m4.xRotate(this.transformMatrix, xRotate, this.transformMatrix);
-        m4.yRotate(this.transformMatrix, yRotate, this.transformMatrix);
-        m4.zRotate(this.transformMatrix, zRotate, this.transformMatrix);
-    }
-
-    scale(xScale, yScale, zScale) {
-        m4.scale(this.transformMatrix, xScale, yScale, zScale, this.transformMatrix);
-    }
-
-    getPosition() {
-        return { x: this.transformMatrix[12], y: this.transformMatrix[13], z: this.transformMatrix[14] }
-    }
-
-    test() {
-    }
-}
-
-// classe utilizzata per tener conto della matrice di trasformazione del punto di vista del giocatore
-class CameraTransform {
-    xAngle;
-    yAngle;
-    transformMatrix;
-
-    constructor() {
-        this.xAngle = 0;
-        this.yAngle = 0;
-
-        this.transformMatrix = m4.translation(0,0,40);
-    }
-
-    // metodo utilizzato per traslare il giocatore 
-    translate(x, z) {
-        // prendo l'attuale rotazione del giocatore
-        let temp = m4.multiply(this.transformMatrix, this.getRotation());
-        // partendo dalla rotazione attuale mi sposto di quanto indicano "x e z"
-        m4.translate(temp, x, 0, z, temp);
-        // mi segno la nuova posizione del giocatore (trascurando lo spostamento su y)
-        return m4.translation(temp[12], 0, temp[14]);
-    }
-
-    // metodo utilizzato per ruotare la visuale del giocatore
-    rotate(x, y) {
-
-        // aggiungo alle variabili in cui conservo la rotazione su "asse x" e "asse y" un certo angolo
-        this.yAngle += y;
-
-        // nel caso dell'asse x prima di aggiungere l'angolo controllo di non essere fuori dall'angolo massimo di rotazione
-        if ((this.xAngle > 90 && x > 0) || (this.xAngle < -90 && x < 0))
-            return;
-        this.xAngle += x;
-    }
-
-    // calcolo la matrice di rotazione ottenuta dagli angoli conservati internamente
-    // !ATTENZIONE! l'ordine in cui vengono effettuate le trasformazioni è molto importante
-    getRotation() {
-        let a = m4.xRotation(degToRad(this.xAngle));
-        let b = m4.yRotation(degToRad(this.yAngle));
-        let y = m4.zRotation(0);
-
-        var matrix = m4.multiply(y, b);
-        m4.multiply(matrix, a, matrix);
-
-        return matrix;
-    }
-
-    // combino matrice di rotazione e traslazione e ritorno il risultato
-    getMatrix() {
-        return m4.multiply(this.transformMatrix, this.getRotation())
-    }
-
-    getTransformMatrix() {
-        return this.transformMatrix;
-    }
-
-    getP() {
-        return { x: this.transformMatrix[12], y: this.transformMatrix[13], z: this.transformMatrix[14] }
-    }
-}
-
-function degToRad(deg) {
-    return deg * Math.PI / 180;
-}
-
-function radToDeg(rad) {
-    return rad * (180 / Math.PI);
-}
-
-const vectorAngle = (x, y) =>
-    Math.acos(
-        x.reduce((acc, n, i) => acc + n * y[i], 0) /
-        (Math.hypot(...x) * Math.hypot(...y))
-    );
-
-function pointsDistance(pointStart, pointEnd) {
-    return Math.sqrt(Math.pow(pointStart.x - pointEnd.x, 2) + Math.pow(pointStart.z - pointEnd.z, 2))
-}
-
-function randomIntFromInterval(min, max) { // min and max included 
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
 class Game {
     // le info sugli oggetti presenti nel gioco saranno espresse nel formato:
     //          - modelID:      che indica quale mash rappresenta l'oggetto
@@ -147,9 +20,38 @@ class Game {
     // variabili utilizzate per tenere conto del comportamento delle entità
     entities = [];      // matrici trasformazione
     entitiesPerceptionDistance = 300;
+    entitiesNumber = 2;
 
     // variabili utilizzate per tenere contro delle "strutture in gioco"
     structures = [];    // matrici trasformazione
+    structureHeight = {
+        "albero1": 70,
+        "albero2": 70,
+        "albero3": 50,
+        "albero4": 25,
+        "albero5": 25,
+        "roccia1": 30,
+        "roccia2": 15,
+        "roccia3": -5,
+        "roccia4": -5,
+        "roccia5": -15,
+        "roccia6": -15,
+        "roccia7": -20,
+    }
+    structureColliderDim = {
+        "albero1": 14,
+        "albero2": 14,
+        "albero3": 14,
+        "albero4": 14,
+        "albero5": 14,
+        "roccia1": 75,
+        "roccia2": 60,
+        "roccia3": 40,
+        "roccia4": 40,
+        "roccia5": 14,
+        "roccia6": 14,
+        "roccia7": -1,
+    }
     treesDensity = 2;
     rockNumber = 6;
 
@@ -163,9 +65,9 @@ class Game {
 
     constructor() {
         // calcolo la dimensione totale del terreno su x e y (dato che la mappa è quadrata)
-        this.mapStart = -(this.terrainTailOffset * (this.dimTerrain / 2));
-        this.mapEnd = this.terrainTailOffset * (this.dimTerrain / 2);
         this.halfDimTerrain = this.dimTerrain / 2;
+        this.mapStart = this.terrainTailOffset * -this.halfDimTerrain;
+        this.mapEnd = this.terrainTailOffset * this.halfDimTerrain;
 
         // costruisco il terreno
         this.buildTerrain();
@@ -177,60 +79,62 @@ class Game {
         this.player = new CameraTransform();
         this.playerRunning = false;
         this.playerStamina = this.playerStaminaMax;
-        
+
+        // setto le informazioni per la torcia del giocatore
         this.torchStatus = false;
         this.torchLight = 0;
-
-        // var t = new Transform();
-        // t.translate(110, 5, 0);
-        // t.scale(5, 5, 5)
-        // t.rotate(0, degToRad(-90), 0);
-
-        // this.entities.push({
-        //     transform: t,
-        //     modelID: "fantasma"
-        // })
     }
 
-    // ==== metodi settaggi iniziali ====
+    // ==== metodi per la costruzione della mappa ====
 
     // creazione del terreno
     buildTerrain() {
         this.positionRocks();
+        this.spawnEnemis();
 
+        // 
+        for (let x = -(this.halfDimTerrain); x < this.halfDimTerrain; x++) {
+            for (let z = -(this.halfDimTerrain); z < this.halfDimTerrain; z++) {
+
+
+                let tileX = this.terrainTailOffset * x;
+                let tileZ = this.terrainTailOffset * z;
+
+                this.positionGrass(tileX, tileZ)
+
+                if (x == 0 && z == 0) {
+                    this.positionTotem(tileX, tileZ)
+                    continue;
+                }
+
+                this.plantTrees(tileX, tileZ);
+            }
+        }
+    }
+
+    // aggiunta del pavimento
+    positionGrass(posX, posZ) {
         var t = new Transform();
-        t.translate(0, 0, 0);
-        t.rotate(0,degToRad(90), 0);
+        t.translate(posX, -25, posZ);
+        t.scale(10, 10, 10);
+
+        this.terrain.push({
+            transform: t,
+            modelID: "terreno"
+        })
+    }
+
+    // aggiunta del tomem di fine livello
+    positionTotem(posX, posZ) {
+        var t = new Transform();
+        t.translate(posX, 0, posZ);
+        t.rotate(0, degToRad(90), 0);
         t.scale(4, 4, 4);
-        
+
         this.terrain.push({
             transform: t,
             modelID: "totem"
         })
-
-
-        for (let x = -(this.halfDimTerrain); x < this.halfDimTerrain; x++) {
-            for (let y = -(this.halfDimTerrain); y < this.halfDimTerrain; y++) {
-
-                
-                let tileX = this.terrainTailOffset * x;
-                let tileY = this.terrainTailOffset * y;
-                
-                var t = new Transform();
-                t.translate(tileX, -25, tileY);
-                t.scale(10, 10, 10);
-                
-                this.terrain.push({
-                    transform: t,
-                    modelID: "terreno"
-                })
-
-                if(x == 0 && y == 0)
-                    continue;
-
-                this.plantTrees(tileX, tileY);
-            }
-        }
     }
 
     // posizionamento degli alberi
@@ -243,29 +147,9 @@ class Game {
             let rndIntX = randomIntFromInterval(tileStartX, tileStartX + this.terrainTailOffset);
             let rndIntZ = randomIntFromInterval(tileStartY, tileStartY + this.terrainTailOffset);
             let treeType = randomIntFromInterval(1, 5);
-            let treeYpos = 0;
 
             // l'altezza a cui l'albero è messo dipende dalla sua tipologia
-            switch (treeType) {
-                case 1:
-                    treeYpos = 70;
-                    break;
-                case 2:
-                    treeYpos = 70;
-                    break;
-                case 3:
-                    treeYpos = 50;
-                    break;
-                case 4:
-                    treeYpos = 25;
-                    break;
-                case 5:
-                    treeYpos = 25;
-                    break;
-
-                default:
-                    break;
-            }
+            let treeYpos = this.structureHeight["albero" + treeType];
 
             var t = new Transform();
             t.translate(rndIntX, treeYpos, rndIntZ);
@@ -286,35 +170,9 @@ class Game {
             let rndIntX = randomIntFromInterval(this.mapStart, this.mapEnd);
             let rndIntZ = randomIntFromInterval(this.mapStart, this.mapEnd);
             let rockType = randomIntFromInterval(1, 7);
-            let rockYpos = 0;
 
             // l'altezza a cui la roccia è messa dipende dalla sua tipologia
-            switch (rockType) {
-                case 1:
-                    rockYpos = 30;
-                    break;
-                case 2:
-                    rockYpos = 15;
-                    break;
-                case 3:
-                    rockYpos = -5;
-                    break;
-                case 4:
-                    rockYpos = -5;
-                    break;
-                case 5:
-                    rockYpos = -15;
-                    break;
-                case 6:
-                    rockYpos = -15;
-                    break;
-                case 7:
-                    rockYpos = -20;
-                    break;
-
-                default:
-                    break;
-            }
+            let rockYpos = this.structureHeight["roccia" + rockType];
 
             var t = new Transform();
             t.translate(rndIntX, rockYpos, rndIntZ);
@@ -327,19 +185,42 @@ class Game {
         }
     }
 
+    spawnEnemis() {
+        for (let index = 0; index < this.entitiesNumber; index++) {
+
+            // i memici vengono posizionati in una posizione casuale
+            let rndIntX = randomIntFromInterval(this.mapStart, this.mapEnd);
+            let rndIntZ = randomIntFromInterval(this.mapStart, this.mapEnd);
+
+            var t = new Transform();
+            t.translate(rndIntX, 5, rndIntZ);
+            t.scale(5, 5, 5)
+            t.rotate(0, degToRad(-90), 0);
+
+            this.entities.push({
+                transform: t,
+                modelID: "fantasma"
+            })
+        }
+    }
+
     // ==== metodi movimento giocatore ====
     // muovere il giocatore
     playerWalk(x, z) {
         let playerTopSpeed;
 
+        // imposto la "velocità massima" che il giocatore può avere
         if (this.playerRunning && this.playerStamina > 0)
             playerTopSpeed = this.playerRunSpeed;
         else
             playerTopSpeed = this.playerWalkSpeed;
 
+        // calcolo quale sarà lo spostamento del giocatore moltiplicando lo spostamento su un asse per la "velocità massima"
+        let playerNextPos = this.player.translationPreview(x * playerTopSpeed, z * playerTopSpeed);
 
-        let playerNextPos = this.player.translate(x * playerTopSpeed, z * playerTopSpeed);
-
+        // controllo tra tutte le entità se qualcuna si trova sulla "prossima posizione" del giocatore
+        // - se ciò succede non applico lo spostamento
+        // - se non succede la posizione del giocatore diventa quella che abbiamo precedente mente calcolato 
         for (let index = 0; index < this.structures.length; index++) {
             const element = this.structures[index]
 
@@ -360,23 +241,145 @@ class Game {
         this.playerRunning = isRunning;
     }
 
-    toggleTorch(){
+    // == metodi che definiscono comportamento entità ==
+    
+    // - evitare che l'entità esca dalla mappa
+    keepEntityInMap(entity_dir, entityPos, entityNextPos) {
+        let xPoint = [entityPos.x, 0]; // proiezione pos entità su x
+        let zPoint = [0, entityPos.z]; // proiezione pos entità su z
+        // pos entità su x => pos entità su y
+        let plane = {
+            x: xPoint[0] - zPoint[0],
+            z: xPoint[1] - zPoint[1]
+        }
+
+        // trovo angolo compreso tra i vettori:
+        // - "posizione entità => prossima posizione entità"
+        //                       &
+        // - " pos entità su x => pos entità su y "
+        let angle = radToDeg(vectorAngle([entity_dir.x, entity_dir.z], [plane.x, plane.z]));
+
+        // calcolo la distanza dall'origine di
+        let nextDistance = pointsDistance({ x: 0, z: 0 }, entityNextPos); // prossima posizione che l'entità occuperà
+        let distance = pointsDistance({ x: 0, z: 0 }, entityPos); // posizione che l'entità sta occupando
+
+        // se mi sto ancora allontanando dall'orichine (nextDistance > distance) e 
+        // la mia distanza attuale è maggiore delle dimensioni della mappa dall'origine
+
+        if (nextDistance > distance && distance > (this.halfDimTerrain * this.terrainTailOffset - 100)) {
+
+            // do priorità alla direzione che mi riporta nella mappa
+            if (angle > 90) {
+                return {
+                    leftChange: angle,
+                    rightChange: 180 - angle
+                }
+            }
+            else {
+                return {
+                    leftChange: 180 - angle,
+                    rightChange: angle
+                }
+            }
+        }
+    }
+
+    // - far seguire all'entità il player (se abbastanza vicino)
+    pointEntityToPlayer(entity_left, entityPos, entityNextPos) {
+        // calcolo il vettore dal player all'entità
+        let player_entity = {
+            x: this.player.getPosition().x - entityPos.x,
+            z: this.player.getPosition().z - entityPos.z
+        }
+
+        // se "entityNextPos" è più vicina al player di "entityPos" l'entità sta guardando il player
+        if (pointsDistance(this.player.getPosition(), entityPos) > pointsDistance(this.player.getPosition(), entityNextPos)) {
+
+            // trovo angolo compreso tra i vettori:
+            // - "posizione entità => sua sinistra"
+            //                       &
+            // - "pos entità => pos player"
+            let angle1 = radToDeg(vectorAngle([player_entity.x, player_entity.z], [entity_left.x, entity_left.z]));
+
+            // se l'angolo non è attorno ai 90* (quindi l'entità non sta andando dritta verso il player)
+            // favorisco la probabilità che l'entità giri in modo da tornare alla giusta angolazione con il player
+            if (angle1 < 80) {
+                return {
+                    leftChange: 180,
+                    rightChange: 181
+                }
+            }
+
+            if (angle1 > 100) {
+                return {
+                    leftChange: -1,
+                    rightChange: 0
+                }
+            }
+        } else {
+            // se l'entità non è girata verso il player essa girerà su se stessa
+            return {
+                leftChange: -1,
+                rightChange: 0
+            }
+        }
+    }
+
+    // ==== metodi per le azioni del giocatore ====
+    isPlayerColliding(element, playerPos) {
+        // estraggo la posizione dell'elemento di gioco che sto considerando
+        let elementTrasform = element.transform.getPosition();
+
+        // considero solo la posizione su x e su y rispetto al giocatore
+        var a = elementTrasform.x - playerPos[12];
+        var c = elementTrasform.z - playerPos[14];
+
+        let distance = Math.sqrt(a * a + c * c);
+        let limitDistance = 14;
+
+        // la distanza limite che indica una collisione dipende dall'elemento con cui si sta interagendo
+        if (element.modelID in this.structureColliderDim)
+            limitDistance = this.structureColliderDim[element.modelID]
+
+        // se la distanza è "troppo piccola" viene considerata una collisione
+        if (distance < limitDistance)
+            return true;
+
+        return false;
+    }
+
+    // - accendere e spegnere la torcia
+    toggleTorch() {
         this.torchStatus = this.torchStatus ? false : true;
     }
 
-    updateTorch(){
-        console.log(this.torchStatus);
+    // - aggiornare lo stato della torcia
+    updateTorch() {
+        // se la torcia è spenta la luce emessa sarà zero
         if (!this.torchStatus) {
             this.torchLight = 0;
             return;
         }
 
-        if(this.torchLight > this.torchMaxLight)
+        if (this.torchLight > this.torchMaxLight)
             return;
-
+        
+        // se è accesa ma non al massimo la luce si farà via via più intensa
         this.torchLight += 0.01;
     }
 
+    // === metodi get ===
+    getGameObjInfo() {
+        var gameObjInfo = [];
+
+        gameObjInfo.push(...this.terrain);
+        gameObjInfo.push(...this.structures);
+        gameObjInfo.push(...this.entities);
+
+        return gameObjInfo;
+    }
+
+    // ==== LOOP ====
     updateStatus() {
         this.updateTorch();
 
@@ -434,7 +437,11 @@ class Game {
             // - seguire il giocatore se l'entità è abbastanza vicina
             let changes;
 
-            if (pointsDistance(this.player.getP(), entityPos) > this.entitiesPerceptionDistance)
+            let entityActualPerception = this.entitiesPerceptionDistance;
+            if(!this.torchStatus)
+                entityActualPerception /= 4;
+
+            if (pointsDistance(this.player.getPosition(), entityPos) > entityActualPerception)
                 changes = this.keepEntityInMap(entity_dir, entityPos, entityNextPos);
             else
                 changes = this.pointEntityToPlayer(entity_left, entityPos, entityNextPos);
@@ -454,135 +461,5 @@ class Game {
 
             element.transform.rotate(0, rot, 0);
         });
-    }
-
-    keepEntityInMap(entity_dir, entityPos, entityNextPos) {
-        let xPoint = [entityPos.x, 0]; // proiezione pos entità su x
-        let zPoint = [0, entityPos.z]; // proiezione pos entità su z
-        // pos entità su x => pos entità su y
-        let plane = {
-            x: xPoint[0] - zPoint[0],
-            z: xPoint[1] - zPoint[1]
-        }
-
-        // trovo angolo compreso tra i vettori:
-        // - "posizione entità => prossima posizione entità"
-        //                       &
-        // - " pos entità su x => pos entità su y "
-        let angle = radToDeg(vectorAngle([entity_dir.x, entity_dir.z], [plane.x, plane.z]));
-
-        // calcolo la distanza dall'origine di
-        let nextDistance = pointsDistance({ x: 0, z: 0 }, entityNextPos); // prossima posizione che l'entità occuperà
-        let distance = pointsDistance({ x: 0, z: 0 }, entityPos); // posizione che l'entità sta occupando
-
-        // se mi sto ancora allontanando dall'orichine (nextDistance > distance) e 
-        // la mia distanza attuale è maggiore delle dimensioni della mappa dall'origine
-
-        if (nextDistance > distance && distance > (this.halfDimTerrain * this.terrainTailOffset - 100)) {
-
-            // do priorità alla direzione che mi riporta nella mappa
-            if (angle > 90) {
-                return {
-                    leftChange: angle,
-                    rightChange: 180 - angle
-                }
-            }
-            else {
-                return {
-                    leftChange: 180 - angle,
-                    rightChange: angle
-                }
-            }
-        }
-    }
-
-    pointEntityToPlayer(entity_left, entityPos, entityNextPos) {
-        // calcolo il vettore dal player all'entità
-        let player_entity = {
-            x: this.player.getP().x - entityPos.x,
-            z: this.player.getP().z - entityPos.z
-        }
-
-        // se "entityNextPos" è più vicina al player di "entityPos" l'entità sta guardando il player
-        if (pointsDistance(this.player.getP(), entityPos) > pointsDistance(this.player.getP(), entityNextPos)) {
-
-            // trovo angolo compreso tra i vettori:
-            // - "posizione entità => sua sinistra"
-            //                       &
-            // - "pos entità => pos player"
-            let angle1 = radToDeg(vectorAngle([player_entity.x, player_entity.z], [entity_left.x, entity_left.z]));
-
-            // se l'angolo non è attorno ai 90* (quindi l'entità non sta andando dritta verso il player)
-            // favorisco la probabilità che l'entità giri in modo da tornare alla giusta angolazione con il player
-            if (angle1 < 80) {
-                return {
-                    leftChange: 180,
-                    rightChange: 181
-                }
-            }
-
-            if (angle1 > 100) {
-                return {
-                    leftChange: -1,
-                    rightChange: 0
-                }
-            }
-        } else {
-            // se l'entità non è girata verso il player essa girerà su se stessa
-            return {
-                leftChange: -1,
-                rightChange: 0
-            }
-        }
-    }
-
-    // ==== metodi per le azioni del giocatore ====
-    isPlayerColliding(element, playerPos) {
-        // estraggo la posizione dell'elemento di gioco che sto considerando
-        let elementTrasform = element.transform.getPosition();
-
-        // considero solo la posizione su x e su y rispetto al giocatore
-        var a = elementTrasform.x - playerPos[12];
-        var c = elementTrasform.z - playerPos[14];
-
-        let distance = Math.sqrt(a * a + c * c);
-        let limitDistance = 14;
-
-        // la distanza limite che indica una collisione dipende dall'elemento con cui si sta interagendo
-        switch (element.modelID) {
-            case "roccia7":
-                limitDistance = -1
-                break;
-            case "roccia1":
-                limitDistance = 75;
-                break
-            case "roccia2":
-                limitDistance = 60;
-                break;
-            case "roccia3":
-            case "roccia4":
-                limitDistance = 40;
-                break;
-
-            default:
-                break;
-        }
-
-        // se la distanza è "troppo piccola" viene considerata una collisione
-        if (distance < limitDistance)
-            return true;
-
-        return false;
-    }
-
-    // metodi get
-    getGameObjInfo() {
-        var gameObjInfo = [];
-
-        gameObjInfo.push(...this.terrain);
-        gameObjInfo.push(...this.structures);
-        gameObjInfo.push(...this.entities);
-
-        return gameObjInfo;
     }
 }

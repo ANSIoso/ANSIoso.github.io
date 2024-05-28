@@ -1,9 +1,9 @@
 class Engine {
 
-    // == variabili usate per funzionamento base webgl ==
-    gl;
-    ctx;
-    ext;
+    // == variabili usate per funzionamento dell'engine ==
+    ctx;    // variabile che ospita contesto 2d
+    gl;     // variabile che ospita contesto webgl
+    ext;    // variabile che ospita estensione webgl per gestione depth texture
 
     // - shader programs
     meshProgramInfo;
@@ -51,14 +51,15 @@ class Engine {
     // =============== cose da disegnare ================
     obj = {};       // contiene tutte le mash utilizzabili
     game;           // contiene il gioco esso ha le info su:
-    // - quali mash renderizzare
-    // - dove renderizzarle
+                    // - quali mash renderizzare
+                    // - dove renderizzarle
 
 
     // ==================== METODI ======================
     constructor(canvas, uiCanvas, game) {
         this.game = game;
-
+        
+        // estrazione dei contesti per disegnare sui 2 canvas
         this.gl = canvas.getContext("webgl");
         if (!this.gl) {
             console.log("Errore caricamento webgl");
@@ -71,12 +72,13 @@ class Engine {
             return;
         }
 
+        // estrazione  dell'estensione per la gestione delle depth texture
         this.ext = this.gl.getExtension('WEBGL_depth_texture');
         if (!this.ext) {
             return alert('need WEBGL_depth_texture');
         }
 
-        // compiles and links the shaders, looks up attribute and uniform locations
+        // compila e collega gli shader, ricerca le posizioni degli attribute e delle uniform
         this.meshProgramInfo = webglUtils.createProgramInfo(this.gl, ['3d-vertex-shader', '3d-fragment-shader']);
         this.colorProgramInfo = webglUtils.createProgramInfo(this.gl, ['color-vertex-shader', 'color-fragment-shader']);
         this.skyboxProgramInfo = webglUtils.createProgramInfo(this.gl, ["skybox-vertex-shader", "skybox-fragment-shader"]);
@@ -95,7 +97,7 @@ class Engine {
 
         // imposto le informazioni necessarie a creare la skybox
         this.setUpSkyboxTexture();
-
+        // imposto i buffer che contengono le info sul cubo al quale viene "incollata" la skybox
         this.quadBufferInfo = {
             position: { numComponents: 2, data: null, },
         };
@@ -108,6 +110,7 @@ class Engine {
             1, 1,
         ]
 
+        // imposto punto di vista e posizione della luce
         this.viewTransform = this.game.player;
         this.lightTransform = new Transform();
     }
@@ -198,27 +201,27 @@ class Engine {
         const faceInfos = [
             {
                 target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_X,
-                url: './skybox/testSkybox/px.jpg',
+                url: './assets/skybox/px.jpg',
             },
             {
                 target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
-                url: './skybox/testSkybox/nx.jpg',
+                url: './assets/skybox/nx.jpg',
             },
             {
                 target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
-                url: './skybox/testSkybox/py.jpg',
+                url: './assets/skybox/py.jpg',
             },
             {
                 target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
-                url: './skybox/testSkybox/ny.jpg',
+                url: './assets/skybox/ny.jpg',
             },
             {
                 target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
-                url: './skybox/testSkybox/pz.jpg',
+                url: './assets/skybox/pz.jpg',
             },
             {
                 target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
-                url: './skybox/testSkybox/nz.jpg',
+                url: './assets/skybox/nz.jpg',
             },
         ];
         faceInfos.forEach((faceInfo) => {
@@ -377,11 +380,35 @@ class Engine {
         return { parts, objOffset }
     }
 
-    // === metodi per il rendering
+    // metodo utilizzato per caricare tutte le mash che sono utilizzate nel programma
+    async load() {
+
+        this.obj["terreno"] = await this.loadGeneralObj('./assets/modelsOBJ/grass_slab/grass_slab.obj');
+
+        this.obj["fantasma"] = await this.loadGeneralObj('./assets/modelsOBJ/fantasma/fantasma.obj');
+
+        for (let index = 1; index <= 5; index++) {
+            let treeName = "albero" + index;
+
+            this.obj[treeName] = await this.loadGeneralObj('./assets/modelsOBJ/alberi/' + treeName + '.obj');
+        }
+
+        for (let index = 1; index <= 7; index++) {
+            let rockName = "roccia" + index;
+
+            this.obj[rockName] = await this.loadGeneralObj('./assets/modelsOBJ/rocce/' + rockName + '.obj');
+        }
+
+        this.obj["totem"] = await this.loadGeneralObj('./assets/modelsOBJ/mio_totem/mio.obj');
+
+        this.render();
+    }
+
+    // === metodi per il rendering ===
 
     // imposto la luce
     updateLight() {
-        // definisco proiezione della luce
+        // definisco matrice proiezione della luce
         this.lightProjectionMatrix = m4.perspective(
             degToRad(this.lightFOV),
             this.lightProjWidth / this.lightProjHeight,
@@ -400,7 +427,7 @@ class Engine {
 
     // imposto la view
     updateView() {
-        // definisco proiezione del punto di vista
+        // definisco matrice proiezione del punto di vista
         this.viewProjectionMatrix = m4.perspective(
             degToRad(this.viewFOV),
             this.gl.canvas.clientWidth / this.gl.canvas.clientHeight, // aspect ratio
@@ -413,7 +440,7 @@ class Engine {
 
     // disegna la scena
     // - con il punto di vista di "cameraMatrix"
-    // - riposrtando l'ombra della luce in posizione "lightWorldMatrix" nella posizione "textureMatrix"
+    // - riposrtando l'ombra proiettata dalla luce in posizione "lightWorldMatrix" nella posizione "textureMatrix"
     // - seguendo le istruzioni dello shader "programInfo"
     drawScene(projectionMatrix, cameraMatrix, textureMatrix, lightWorldMatrix, programInfo) {
         const viewMatrix = m4.inverse(cameraMatrix);
@@ -444,7 +471,7 @@ class Engine {
 
         gameObjInfo.forEach(element => {
 
-            // ottengo la mash indicata dall'emement
+            // ottengo la mash indicata dall'element
             let mash = this.obj[element.modelID];
             let mashCenter = mash.objOffset;
 
@@ -466,9 +493,10 @@ class Engine {
         });
     }
 
-    // disegna la skybox
+    // metodo che va a disegnare la skybox
     drawSkybox() {
         // estraggo dalla matrice di traslazione della camera la direzione della visuale
+        // azzerando la posizione in cui si trova in modo che il punto di vista sia sempre al centro della skybox
         var viewDirectionMatrix = m4.inverse(this.viewMatrix);
         viewDirectionMatrix[12] = 0;
         viewDirectionMatrix[13] = 0;
@@ -495,6 +523,24 @@ class Engine {
         webglUtils.drawBufferInfo(this.gl, bufferInfo);
     }
 
+    // metodi utilizzati per il disegno della ui
+    drawStaminaBar() {
+        // imposto dati per il disegno
+        this.ctx.strokeStyle = "white";
+        this.ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+
+        // calcolo punti riferimento delle barre da disegnare
+        let start = 4;
+        let fullBarWidth = 50;
+        let fullBarHeight = 2;
+
+        let pixelToFill = (fullBarWidth * this.game.playerStamina) / this.game.playerStaminaMax;
+
+        // disegno le due barre
+        this.ctx.strokeRect(start, start, fullBarWidth + 2, start + fullBarHeight);
+        this.ctx.fillRect(start + 1, start + 1, pixelToFill, start + fullBarHeight - 2);
+    }
+
     render(time) {
         time *= 0.001;  // convert to seconds
 
@@ -517,7 +563,7 @@ class Engine {
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-
+        
         let textureMatrix = m4.identity();
         textureMatrix = m4.translate(textureMatrix, 0.5, 0.5, 0.5);
         textureMatrix = m4.scale(textureMatrix, 0.5, 0.5, 0.5);
@@ -528,9 +574,11 @@ class Engine {
         textureMatrix = m4.multiply(
             textureMatrix,
             m4.inverse(this.lightWorldMatrix));
-
+        
+        // aggiorno posizione punto di vista
         this.updateView();
 
+        // ridisegno la scena dal punto di vista riportando i dati sulla depth texture
         this.drawScene(this.viewProjectionMatrix, this.viewMatrix, textureMatrix, this.lightWorldMatrix, this.meshProgramInfo);
 
         this.drawSkybox();
@@ -545,46 +593,4 @@ class Engine {
 
         requestAnimationFrame(this.render.bind(this));
     }
-
-    // metodi utilizzati per il disegno della ui
-    drawStaminaBar() {
-        this.ctx.strokeStyle = "white";
-        this.ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-
-        let start = 4;
-        let fullBarWidth = 50;
-        let fullBarHeight = 2;
-
-        // F : X = MS : S
-
-        let pixelToFill = (fullBarWidth * this.game.playerStamina) / this.game.playerStaminaMax;
-
-        this.ctx.strokeRect(start, start, fullBarWidth + 2, start + fullBarHeight);
-        this.ctx.fillRect(start + 1, start + 1, pixelToFill, start + fullBarHeight - 2);
-    }
-
-
-    async load() {
-
-        this.obj["terreno"] = await this.loadGeneralObj('./modelsOBJ/grass_slab/grass_slab.obj');
-
-        this.obj["fantasma"] = await this.loadGeneralObj('./modelsOBJ/fantasma/fantasma.obj');
-
-        for (let index = 1; index <= 5; index++) {
-            let treeName = "albero" + index;
-
-            this.obj[treeName] = await this.loadGeneralObj('./modelsOBJ/alberi/' + treeName + '.obj');
-        }
-
-        for (let index = 1; index <= 7; index++) {
-            let rockName = "roccia" + index;
-
-            this.obj[rockName] = await this.loadGeneralObj('./modelsOBJ/rocce/' + rockName + '.obj');
-        }
-
-        this.obj["totem"] = await this.loadGeneralObj('./modelsOBJ/mio_totem/mio.obj');
-
-        this.render();
-    }
-
 }
