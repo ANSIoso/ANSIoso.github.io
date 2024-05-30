@@ -14,13 +14,13 @@ class Game {
 
     torchStatus;
     torchLight;
-    torchMaxLight = 0.9;
+    torchMaxLight = 0.8;
 
 
     // variabili utilizzate per tenere conto del comportamento delle entità
     entities = [];      // matrici trasformazione
     entitiesPerceptionDistance = 300;
-    entitiesNumber = 2;
+    entitiesNumber = 3;
 
     // variabili utilizzate per tenere contro delle "strutture in gioco"
     structures = [];    // matrici trasformazione

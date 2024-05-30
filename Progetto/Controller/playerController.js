@@ -39,15 +39,18 @@ class Controller {
     turningSensitivityTouch = 10;
 
     constructor(canvas, uiCanvas, gameDiv, game) {
+        // salvo le aree di interazione
         this.canvas = canvas;
         this.uiCanvas = uiCanvas;
+        this.gameDiv = gameDiv;
 
+        // la logica del gioco
         this.game = game;
 
-        this.gameDiv = gameDiv;
+
         this.fullScreen = false;
 
-
+        // imposto il valore iniziale dei tasti
         this.xStik = 0;
         this.yStik = 0;
 
@@ -58,9 +61,11 @@ class Controller {
 
         this.shiftKey = false;
 
+        // assegno le funzioni ai tasti
         this.setFuncion();
     }
 
+    // funzione per attivare e disattivare la modalità full screen
     toggleFullScreen() {
         if (this.fullScreen) {
             document.exitFullscreen();
@@ -71,18 +76,60 @@ class Controller {
         }
     }
 
+    // tiene conto dell'inclinazione dello "stick virtuale"
+    inclineStik(positive, negative, value) {
+        if (positive || negative) {
+            if (positive)
+                value = lerp(value, 1, 0.1);
+            else
+                value = lerp(value, -1, 0.1);
+        }
+        else
+            value = lerp(value, 0, 0.3);
+        return value;
+    }
+
+    // arrotondo i valori presi dallo stick virtuale
+    roundStick(value) {
+        if (value >= 0.99)
+            value = 1
+        if (value <= 0.01 && value >= -0.01)
+            value = 0
+        if (value <= -0.99)
+            value = -1
+
+        return value;
+    }
+
     // impostiamo l'effetto che i comandi hanno
     setFuncion() {
+        this.setUpPCControls();
+        this.setUpPhoneControls();
+    }
 
+    setUpPCControls() {
         let self = this;
 
-        // ==== movimenti della testa del giocatore ====
-        // - da computer con il mouse
+        // === imposto comandi del mouse ===
+        // - movimento "testa" del giocatore
         window.addEventListener('mousemove', function (e) {
             self.game.playerTurnHead(-e.movementX / self.turningSensitivityMouse, -e.movementY / self.turningSensitivityMouse)
         })
 
-        // ==== movimento corpo del giocatore ====
+        // - impostare "focus mode" del mouse
+        this.uiCanvas.addEventListener('click', () => {
+            if (window.innerWidth < 1300)
+                return;
+
+            self.canvas.requestPointerLock();
+        });
+
+        // - accendere e spegnere la torcia
+        this.canvas.addEventListener('mousedown', (e) => {
+            self.game.toggleTorch();
+        })
+
+        // ==== imposto comandi tastiera ====
         window.onkeyup = function (e) {
             switch (e.keyCode) {
                 case self.KEY_CODES.W:
@@ -125,19 +172,6 @@ class Controller {
                     break;
             }
         };
-
-        this.uiCanvas.addEventListener('click', () => {
-            if (window.innerWidth < 1300)
-                return;
-
-            self.canvas.requestPointerLock();
-        });
-
-        this.canvas.addEventListener('mousedown', (e) => {
-            self.game.toggleTorch();
-        })
-
-        this.setUpPhoneControls();
     }
 
     setUpPhoneControls() {
@@ -235,31 +269,6 @@ class Controller {
         game.playerWalk(this.xStik, -this.yStik);
         game.setPlayerRunning(this.shiftKey);
     }
-
-    // tiene conto dell'inclinazione dello "stick virtuale"
-    inclineStik(positive, negative, value) {
-        if (positive || negative) {
-            if (positive)
-                value = lerp(value, 1, 0.1);
-            else
-                value = lerp(value, -1, 0.1);
-        }
-        else
-            value = lerp(value, 0, 0.3);
-        return value;
-    }
-
-    // arrotondo i valori presi dallo stick virtuale
-    roundStick(value) {
-        if (value >= 0.99)
-            value = 1
-        if (value <= 0.01 && value >= -0.01)
-            value = 0
-        if (value <= -0.99)
-            value = -1
-
-        return value;
-    }
 }
 
 const canvas = document.getElementById("canvas");
@@ -271,5 +280,6 @@ const game = new Game();
 const engine = new Engine(canvas, uiCanvas, game);
 
 const controller = new Controller(canvas, uiCanvas, gameDiv, game);
+const engineContoller = new EngineContoller(engine);
 
 engine.load();

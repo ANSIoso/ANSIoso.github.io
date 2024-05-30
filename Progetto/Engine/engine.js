@@ -1,5 +1,4 @@
 class Engine {
-
     // == variabili usate per funzionamento dell'engine ==
     ctx;    // variabile che ospita contesto 2d
     gl;     // variabile che ospita contesto webgl
@@ -9,6 +8,11 @@ class Engine {
     meshProgramInfo;
     colorProgramInfo;
     skyboxProgramInfo;
+    // - - settaggi shader
+    enableSpecular;
+    enableNormalMaps;
+    enableShadows;
+    enableShading;
 
     // - setting defoult di un modello caricato
     defoulTexture;
@@ -51,14 +55,15 @@ class Engine {
     // =============== cose da disegnare ================
     obj = {};       // contiene tutte le mash utilizzabili
     game;           // contiene il gioco esso ha le info su:
-                    // - quali mash renderizzare
-                    // - dove renderizzarle
+    // - quali mash renderizzare
+    // - dove renderizzarle
 
 
     // ==================== METODI ======================
     constructor(canvas, uiCanvas, game) {
+        this.screenFocused = false;
         this.game = game;
-        
+
         // estrazione dei contesti per disegnare sui 2 canvas
         this.gl = canvas.getContext("webgl");
         if (!this.gl) {
@@ -82,6 +87,13 @@ class Engine {
         this.meshProgramInfo = webglUtils.createProgramInfo(this.gl, ['3d-vertex-shader', '3d-fragment-shader']);
         this.colorProgramInfo = webglUtils.createProgramInfo(this.gl, ['color-vertex-shader', 'color-fragment-shader']);
         this.skyboxProgramInfo = webglUtils.createProgramInfo(this.gl, ["skybox-vertex-shader", "skybox-fragment-shader"]);
+
+        // attivo tutte le opzioni di rendering
+        this.enableSpecular = 1;
+        this.enableNormalMaps = 1;
+        this.enableShadows = 1;
+        this.enableShading = 1;
+
 
         // controllo che gli shader siano stati caricati correttamente
         console.log(this.meshProgramInfo.program);
@@ -420,7 +432,7 @@ class Engine {
         // posiziono la luce al fianco della camera
         this.lightTransform.transformMatrix = m4.copy(this.viewTransform.getMatrix());
         this.lightTransform.translate(10, 0, 0);
-        this.lightTransform.rotate(degToRad(-10 ), 0, 0);
+        this.lightTransform.rotate(degToRad(-10), 0, 0);
         // posiziono la luce dove il transform indica
         this.lightWorldMatrix = this.lightTransform.transformMatrix;
     }
@@ -449,14 +461,22 @@ class Engine {
 
         // imposto gli uniforms che sono univoci per tutti gli obj
         const sharedUniforms = {
+            // settaggi shader
+            u_enableSpecular: this.enableSpecular,
+            u_enableNormalMaps: this.enableNormalMaps,
+            u_enableShadows: this.enableShadows,
+            u_enableShading: this.enableShading,
+
+            // intensità luce torcia
+            u_lightPower: this.game.torchLight,
+
             u_view: viewMatrix,
             u_projection: projectionMatrix,
             u_bias: this.bias,
             u_textureMatrix: textureMatrix,
             u_projectedTexture: this.depthTexture,
 
-            lightPower: this.game.torchLight,
-
+            // gestione delle ombre
             u_innerLimit: Math.cos(degToRad(this.lightFOV / 2 - this.lightGradient)),
             u_outerLimit: Math.cos(degToRad(this.lightFOV / 2)),
             u_lightDirection: lightWorldMatrix.slice(8, 11).map(v => -v),
@@ -541,6 +561,20 @@ class Engine {
         this.ctx.fillRect(start + 1, start + 1, pixelToFill, start + fullBarHeight - 2);
     }
 
+    writeOnScreenCenter(text) {
+        // sfumo tutto lo schermo di nero
+        this.ctx.fillStyle = "rgba(0, 0, 0, 0.9)";
+        this.ctx.fillRect(0, 0, uiCanvas.width, uiCanvas.height);
+
+        // calcolo dimensione della stringa
+        let textWidth = this.ctx.measureText(text).width;
+
+        // imposto la scritta bianca e il suo font
+        this.ctx.font = '12px Abys';
+        this.ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
+        this.ctx.fillText(text, (uiCanvas.width / 2) - (textWidth / 2), uiCanvas.height / 2)
+    }
+
     render(time) {
         time *= 0.001;  // convert to seconds
 
@@ -563,7 +597,7 @@ class Engine {
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-        
+
         let textureMatrix = m4.identity();
         textureMatrix = m4.translate(textureMatrix, 0.5, 0.5, 0.5);
         textureMatrix = m4.scale(textureMatrix, 0.5, 0.5, 0.5);
@@ -574,7 +608,7 @@ class Engine {
         textureMatrix = m4.multiply(
             textureMatrix,
             m4.inverse(this.lightWorldMatrix));
-        
+
         // aggiorno posizione punto di vista
         this.updateView();
 
@@ -584,8 +618,11 @@ class Engine {
         this.drawSkybox();
 
         // pulisco il canvas della ui
-        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.ctx.clearRect(0, 0, uiCanvas.width, uiCanvas.height);
         this.drawStaminaBar()
+
+        if (document.pointerLockElement != canvas && window.innerWidth > 1300)
+            this.writeOnScreenCenter("Clicca qui")
 
         //loop
         this.game.updateStatus();
