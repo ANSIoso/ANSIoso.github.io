@@ -41,26 +41,118 @@
 		</div>
 	</div>
 
-	<div>
-		Settings
-		<p>
-			<input id="Specular-set" type="checkbox" checked> Specular 
-		</p>
+	<div id="other">
+		<div id="SettingsDiv">
+			<p class="title">Impostazioni</p>
+			<div class="setting-line">
+				<div class="checkbox-wrapper-8">
+					<input class="tgl tgl-skewed" id="Specular-set" type="checkbox" checked>
+					<label class="tgl-btn" data-tg-off="OFF" data-tg-on="ON" for="Specular-set"></label>
+				</div>
+				<p>Specular</p>
+			</div>
 
-		<p>
-			<input id="NormalMaps-set" type="checkbox" checked> NormalMaps 
-		</p>
+			<div class="setting-line">
+				<div class="checkbox-wrapper-8">
+					<input class="tgl tgl-skewed" id="NormalMaps-set" type="checkbox" checked>
+					<label class="tgl-btn" data-tg-off="OFF" data-tg-on="ON" for="NormalMaps-set"></label>
+				</div>
+				<p>NormalMaps</p>
+			</div>
 
-		<p>
-			<input id="Shadows-set" type="checkbox" checked> Shadows 
-		</p>
+			<div class="setting-line">
+				<div class="checkbox-wrapper-8">
+					<input class="tgl tgl-skewed" id="Shadows-set" type="checkbox" checked>
+					<label class="tgl-btn" data-tg-off="OFF" data-tg-on="ON" for="Shadows-set"></label>
+				</div>
+				<p>Shadows</p>
+			</div>
 
-		<p>
-			<input id="Shading-set" type="checkbox" checked> Shading 
-		</p>
+			<div class="setting-line">
+				<div class="checkbox-wrapper-8">
+					<input class="tgl tgl-skewed" id="Shading-set" type="checkbox" checked>
+					<label class="tgl-btn" data-tg-off="OFF" data-tg-on="ON" for="Shading-set"></label>
+				</div>
+				<p>Shading</p>
+			</div>
 
+			<div class="setting-line">
+				<div class="checkbox-wrapper-8">
+					<input class="tgl tgl-skewed" id="Audio-set" type="checkbox">
+					<label class="tgl-btn" data-tg-off="OFF" data-tg-on="ON" for="Audio-set"></label>
+				</div>
+				<p>Audio</p>
+			</div>
+		</div>
 
+		<div id="info-div">
+			<p class="title">Comandi</p>
+			<div>
+				<div class="infoButton">
+					<i class="fa-solid fa-up-long"></i>
+					<p>/</p>
+					<p class="key-btn">W</p>
+				</div>
+				<p>avanti</p>
+			</div>
+
+			<div>
+				<div class="infoButton">
+					<i class="fa-solid fa-down-long"></i>
+					<p>/</p>
+					<p class="key-btn">S</p>
+				</div>
+				<p>indietro</p>
+			</div>
+
+			<div>
+				<div class="infoButton">
+					<i class="fa-solid fa-left-long"></i>
+					<p>/</p>
+					<p class="key-btn">A</p>
+				</div>
+				<p>sinistra</p>
+			</div>
+
+			<div>
+				<div class="infoButton">
+					<i class="fa-solid fa-right-long"></i>
+					<p>/</p> 
+					<p class="key-btn">D</p>
+				</div>
+				<p>destra</p>
+			</div>
+
+			<div>
+				<div class="infoButton">
+					<i class="fa-solid fa-person-running"></i>
+					<p>/</p> 
+					<p class="key-btn">Shift</p>
+				</div>
+				<p>corsa</p>
+			</div>
+
+			<div>
+				<div class="infoButton">
+					<i class="fa-solid fa-lightbulb"></i>
+					<p>/</p> 
+					<p class="key-btn">Click mouse</p>
+				</div>
+				<p>torcia</p>
+			</div>
+
+			<div>
+				<div class="infoButton">
+					<i class="fa-solid fa-expand"></i>
+					<p>/</p>
+					<p class="key-btn">F</p>
+				</div>
+				<p>schermo intero</p>
+			</div>
+
+		</div>
 	</div>
+
 
 	<script src="https://kit.fontawesome.com/06d84ce8cf.js" crossorigin="anonymous"></script>
 
@@ -292,6 +384,7 @@
 
 	<!-- controller -->
 	<script src="Controller/engineController.js"></script>
+	<script src="Controller/audioController.js"></script>
 	<script src="Controller/playerController.js"></script>
 
 </body>

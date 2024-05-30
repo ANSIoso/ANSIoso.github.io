@@ -127,6 +127,7 @@ class Controller {
         // - accendere e spegnere la torcia
         this.canvas.addEventListener('mousedown', (e) => {
             self.game.toggleTorch();
+            audioController.performSwitchAudio();
         })
 
         // ==== imposto comandi tastiera ====
@@ -210,6 +211,7 @@ class Controller {
 
         lightBtn.ontouchstart = function () {
             self.game.toggleTorch();
+            audioController.performSwitchAudio();
         }
 
         // - tasti movimento
@@ -267,6 +269,13 @@ class Controller {
 
         // imprimo i comandi del controller nel game
         game.playerWalk(this.xStik, -this.yStik);
+        // se il player si sta muovendo riproduto il rumore dei passi
+        if(this.xStik != 0 || this.yStik != 0)
+            audioController.performPlayerMovmentAudio(this.game.playerRunning && this.game.playerStamina > 0);
+        else
+            audioController.stopPlayerMovmentAudio();
+
+
         game.setPlayerRunning(this.shiftKey);
     }
 }
@@ -281,5 +290,6 @@ const engine = new Engine(canvas, uiCanvas, game);
 
 const controller = new Controller(canvas, uiCanvas, gameDiv, game);
 const engineContoller = new EngineContoller(engine);
+const audioController = new AudioController();
 
 engine.load();

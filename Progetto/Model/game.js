@@ -7,7 +7,7 @@ class Game {
     // variabili utilizzate per tenero conto del movimento del player
     player;             // matrice trasformazione
     playerRunning;
-    playerWalkSpeed = 1;
+    playerWalkSpeed = 10;
     playerRunSpeed = 2.5;
     playerStamina;
     playerStaminaMax = 100;
@@ -21,6 +21,8 @@ class Game {
     entities = [];      // matrici trasformazione
     entitiesPerceptionDistance = 300;
     entitiesNumber = 3;
+    minEntityDistance;
+    noticed;
 
     // variabili utilizzate per tenere contro delle "strutture in gioco"
     structures = [];    // matrici trasformazione
@@ -397,6 +399,9 @@ class Game {
         }
 
         // aggiorno lo stato dei nemici
+        this.minEntityDistance = Math.abs(this.mapEnd);
+        this.noticed = false;
+
         this.entities.forEach(element => {
             // l'entità si muove sempre in avanti
             element.transform.translate(0.1, 0, 0);
@@ -441,10 +446,13 @@ class Game {
             if(!this.torchStatus)
                 entityActualPerception /= 4;
 
-            if (pointsDistance(this.player.getPosition(), entityPos) > entityActualPerception)
+            let entityDistance = pointsDistance(this.player.getPosition(), entityPos)
+            if (entityDistance > entityActualPerception)
                 changes = this.keepEntityInMap(entity_dir, entityPos, entityNextPos);
-            else
+            else{
                 changes = this.pointEntityToPlayer(entity_left, entityPos, entityNextPos);
+                this.noticed = true;
+            }
 
             // se non ci sono cambi si manterranno le probabilità iniziali
             if (changes != undefined) {
@@ -460,6 +468,13 @@ class Game {
 
 
             element.transform.rotate(0, rot, 0);
+
+            this.minEntityDistance = this.minEntityDistance > entityDistance ? entityDistance : this.minEntityDistance;
         });
+
+        if (this.minEntityDistance < this.entitiesPerceptionDistance && this.noticed)
+            audioController.performDistortion(1 - this.minEntityDistance / this.entitiesPerceptionDistance);
+        else
+            audioController.performDistortion(0);
     }
 }
