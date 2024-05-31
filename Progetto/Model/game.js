@@ -7,7 +7,7 @@ class Game {
     // variabili utilizzate per tenero conto del movimento del player
     player;             // matrice trasformazione
     playerRunning;
-    playerWalkSpeed = 10;
+    playerWalkSpeed = 1;
     playerRunSpeed = 2.5;
     playerStamina;
     playerStaminaMax = 100;
@@ -22,7 +22,7 @@ class Game {
     entitiesPerceptionDistance = 300;
     entitiesNumber = 3;
     minEntityDistance;
-    noticed;
+    entityFollowingPlayer;
 
     // variabili utilizzate per tenere contro delle "strutture in gioco"
     structures = [];    // matrici trasformazione
@@ -399,8 +399,10 @@ class Game {
         }
 
         // aggiorno lo stato dei nemici
+
+        // imposto la distanza dall'entià più vicina alla dimensione della mappa
         this.minEntityDistance = Math.abs(this.mapEnd);
-        this.noticed = false;
+        this.entityFollowingPlayer = false;
 
         this.entities.forEach(element => {
             // l'entità si muove sempre in avanti
@@ -428,6 +430,16 @@ class Game {
                 z: entityPos.z - entityLeftTrasform[14]
             }
 
+            // calcolo la percezione dell'entità in base al fatto se la torcia del player è accesa o spenta
+            let entityActualPerception = this.entitiesPerceptionDistance;
+            if(!this.torchStatus)
+                entityActualPerception /= 4;
+
+
+            // calcolo la distanza dell'entità dal player e se è l'entità più vicina a esso
+            let entityDistance = pointsDistance(this.player.getPosition(), entityPos);
+            this.minEntityDistance = this.minEntityDistance > entityDistance ? entityDistance : this.minEntityDistance;
+
             // genero una possibile rotazione che l'entità andrà a subire
             // di base:
             // - [45  < x] => girerà a sinistra
@@ -442,16 +454,11 @@ class Game {
             // - seguire il giocatore se l'entità è abbastanza vicina
             let changes;
 
-            let entityActualPerception = this.entitiesPerceptionDistance;
-            if(!this.torchStatus)
-                entityActualPerception /= 4;
-
-            let entityDistance = pointsDistance(this.player.getPosition(), entityPos)
             if (entityDistance > entityActualPerception)
                 changes = this.keepEntityInMap(entity_dir, entityPos, entityNextPos);
             else{
                 changes = this.pointEntityToPlayer(entity_left, entityPos, entityNextPos);
-                this.noticed = true;
+                this.entityFollowingPlayer = true;
             }
 
             // se non ci sono cambi si manterranno le probabilità iniziali
@@ -466,13 +473,11 @@ class Game {
             if (action > rightChange)
                 rot = -0.1
 
-
             element.transform.rotate(0, rot, 0);
-
-            this.minEntityDistance = this.minEntityDistance > entityDistance ? entityDistance : this.minEntityDistance;
         });
 
-        if (this.minEntityDistance < this.entitiesPerceptionDistance && this.noticed)
+        // se un'entità è abbastanza vicina al player e lo sta seguendo riproduco suono
+        if (this.minEntityDistance < this.entitiesPerceptionDistance && this.entityFollowingPlayer)
             audioController.performDistortion(1 - this.minEntityDistance / this.entitiesPerceptionDistance);
         else
             audioController.performDistortion(0);
