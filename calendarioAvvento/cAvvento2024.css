@@ -27,12 +27,18 @@
 
 .day{
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: 5px;
+    right: 5px;
 
-    font-size: larger;
+    min-height: 2vh;
+    min-width: 4vh;
 
-    padding: 10px;
+    transform: rotate(0.05turn);
+
+    font-size: 2vh;
+    text-align: center;
+
+    background-color: aliceblue;
 }
 
 .string{

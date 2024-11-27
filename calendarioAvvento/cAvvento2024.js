@@ -69,8 +69,11 @@ random_days_list.forEach((day, index) => {
   pack_cap_decoration.appendChild(o_string);
   v_string.classList.add("string", "v_string");
   pack_cap_decoration.appendChild(v_string);
+
+
   day_mark.classList.add("day");
   day_mark.innerHTML = day;
+  
   pack_cap_decoration.appendChild(day_mark)
 
   
