@@ -1,0 +1,87 @@
+.pac_component{
+    border: 5px solid black;
+
+    position: absolute;
+    left: 0px;
+    right: 0px;
+
+    width: 100%;
+    height: 100%;
+
+    border-radius: 15px;
+}
+
+.pac_content{
+    background-color: #F5624D;
+    border-color: #CC231E;
+
+    border-width: 8px;
+}
+
+.pack_cap_decoration{
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+}
+
+.day{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    font-size: larger;
+
+    padding: 10px;
+}
+
+.string{
+    position: absolute;
+    left: 0;
+    right: 0; 
+    top: 0;
+    bottom: 0;
+
+    background-color: #0F8A5F;
+}
+
+.o_string{
+    margin: auto 0;
+
+    border-top: 5px solid black;
+    border-bottom: 5px solid black;
+
+    width: 100%;
+    height: 20%;
+}
+
+.v_string{
+    margin: 0 auto;
+
+    border-left: 5px solid black;
+    border-right: 5px solid black;
+
+    width: 20%;
+    height: 100%;
+}
+
+.pac_cap{
+    background-color: #CC231E;
+
+    visibility: visible;
+    opacity: 1;
+
+
+    /* This timing applies on the way OUT */
+    transition-timing-function: ease-in;
+
+    /* Quick on the way out */
+    transition: 0.8s;
+}
+
+.open {
+    transform: translateY(-50%) scale(1.05) rotate(-0.005turn);
+
+    opacity: 0;
+    visibility: hidden;
+}
