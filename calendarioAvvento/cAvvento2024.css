@@ -27,18 +27,14 @@
 
 .day{
     position: absolute;
-    bottom: 5px;
-    right: 5px;
+    
+    right: 0.5vh; 
+    bottom: -0.8vh;
 
-    min-height: 2vh;
-    min-width: 4vh;
+    font-size: 4vh;
+    font-weight: 900;
 
-    transform: rotate(0.05turn);
-
-    font-size: 2vh;
-    text-align: center;
-
-    background-color: aliceblue;
+    color: aliceblue;
 }
 
 .string{
@@ -58,7 +54,7 @@
     border-bottom: 5px solid black;
 
     width: 100%;
-    height: 20%;
+    height: 3vh;
 }
 
 .v_string{
@@ -67,7 +63,7 @@
     border-left: 5px solid black;
     border-right: 5px solid black;
 
-    width: 20%;
+    width: 3vh;
     height: 100%;
 }
 
@@ -90,4 +86,19 @@
 
     opacity: 0;
     visibility: hidden;
+}
+
+.locked {
+    /* Start the shake animation and make the animation last for 0.5 seconds */
+    animation: shake 0.5s;
+  
+    /* When the animation is finished, start again */
+    animation-iteration-count: infinite;
+}
+  
+@keyframes shake {
+    25% { transform: translate(-2px, 0px) scale(1.02); }
+    50% { transform: translate(2px, 0px) scale(1.02); }
+    75% { transform: translate(-1px, 0px) scale(1); }
+    100% { transform: translate(1px, 0px) scale(1); }
 }
