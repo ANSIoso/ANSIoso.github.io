@@ -39,6 +39,81 @@ body{
     border-width: 8px;
 }
 
+@keyframes popup-in {
+    0% { 
+        transform: scale(0.1); 
+        opacity: 0; 
+    }
+    50% { 
+        transform: scale(1.05); 
+        opacity: 1; 
+    }
+    100% { 
+        transform: scale(1); 
+    }
+}
+
+@keyframes popup-out {
+    0% { 
+        transform: scale(0.1); 
+        opacity: 0; 
+    }
+    50% { 
+        transform: scale(1.05); 
+        opacity: 1; 
+    }
+    100% { 
+        transform: scale(1); 
+    }
+}
+
+.focus {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    width: 60vh; /* Larghezza del div */
+    height: 70vh; /* Altezza del div */
+
+    margin: auto; /* Centro automatico */
+
+    z-index: 10;
+
+    animation: popup-in 0.5s ease-out; /* Animazione per l'entrata */
+}
+
+.unfocus {
+    animation: popup-out 0.5s ease-out; /* L'animazione riguarda solo il scale e l'opacità */
+}
+
+@keyframes back-in {
+    0% { 
+        opacity: 0; 
+    }
+    100% { 
+        opacity: 1;
+    }
+}
+
+#backDrop{
+    display: none;
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    margin: auto; /* Centro automatico */
+
+    z-index: 9;
+    animation: back-in 0.5s ease-out;
+}
+
+
 .pack_cap_decoration{
     position: relative;
 

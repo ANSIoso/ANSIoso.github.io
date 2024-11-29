@@ -5,6 +5,21 @@ const Pack_status = {
   LOCKED: "locked"
 };
 
+const backDrop = document.getElementById("backDrop")
+let focusedPack = null;
+backDrop.onclick = function(){
+  backDrop.style.display = "none";
+
+  if(!focusedPack)
+    return
+
+  focusedPack.classList.toggle("unfocus");
+  focusedPack.classList.toggle("focus");
+  focusedPack = null;
+}
+backDrop.style.display = "block";
+backDrop.style.display = "none";
+
 // Pattern delle dimensioni delle celle
 const sizePatternB = [
   { col: 1, row: 1 }, // Elemento grande
@@ -76,14 +91,32 @@ function producePackCap(day, status){
   return pack_cap;
 }
 
+function producePackContent(){
+  let pack_content = document.createElement("div");
+  pack_content.classList.add("pac_content", "pac_component", "unfocus");
+
+  pack_content.onclick = function(){
+    focusedPack = pack_content;
+
+    pack_content.classList.toggle("unfocus");
+    pack_content.classList.toggle("focus");
+    
+    if (backDrop.style.display == "none") {
+      backDrop.style.display = "block";
+    } else {
+      backDrop.style.display = "none";
+    }
+  }
+
+  return pack_content;
+}
+
 // Genera i div e applica le dimensioni
 random_days_list.forEach((day, index) => {
-  let pack = document.createElement("div");
-  
-  let pack_content = document.createElement("div");
+  let pack = document.createElement("div");  
+
 
   let status;
-
 
   if(day < 9)
     status = Pack_status.OPENED;
@@ -93,6 +126,8 @@ random_days_list.forEach((day, index) => {
     status = Pack_status.LOCKED;
   
   let pack_cap = producePackCap(day, status);
+  let pack_content = producePackContent();
+
 
   // prendo come riferimento arr "sizePatternB" ma è la stessa cosa per "sizePatternS"
   // dal momento che entrambi hanno la stessa lunghezza
@@ -120,8 +155,6 @@ random_days_list.forEach((day, index) => {
     "min-h-[12vh]",
     "h-full",
   );
-
-  pack_content.classList.add("pac_content", "pac_component");
   
   pack.appendChild(pack_content);
   pack.appendChild(pack_cap);
