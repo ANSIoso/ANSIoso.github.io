@@ -5,20 +5,30 @@ const Pack_status = {
   LOCKED: "locked"
 };
 
-const backDrop = document.getElementById("backDrop")
 let focusedPack = null;
+
+const backDrop = document.getElementById("backDrop")
 backDrop.onclick = function(){
   backDrop.style.display = "none";
 
   if(!focusedPack)
     return
 
-  focusedPack.classList.toggle("unfocus");
-  focusedPack.classList.toggle("focus");
+  togglePack(focusedPack)
+
   focusedPack = null;
 }
 backDrop.style.display = "block";
 backDrop.style.display = "none";
+
+function togglePack(pack){
+    pack.classList.toggle("unfocus");
+    pack.classList.toggle("focus");
+
+    let pac_img = pack.querySelectorAll(".img")[0]
+    
+    pac_img.classList.toggle("img_b")
+}
 
 // Pattern delle dimensioni delle celle
 const sizePatternB = [
@@ -39,6 +49,55 @@ const sizePatternS = [
     { col: 2, row: 1 }, // Elemento largo
 ];
 
+// Replace with your actual Spreadsheet ID
+let spreadsheetId = '168hnotY6vthGX7ETik3X1q2wOtxTP9nI9Qm97Ntxui8';
+
+// Replace with your API Key
+const apiKey = 'AIzaSyAQ9WRNKFwme_YiA1DtZi27eAg7mmfeJyY';
+
+// Construct the URL for Google Sheets API v4
+let url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/Foglio1?key=${apiKey}`;
+
+async function fetchGoogleSheetData() {
+    try {
+        // Fetch data from Google Sheets API
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        // Extract rows from the data
+        const rows = data.values;
+
+        createPacks(rows.slice(1, rows.length), rows[0][0])
+        
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+fetchGoogleSheetData()
+
+let btn = document.getElementById("btn");
+btn.onclick = function(){
+    let title = document.getElementById("title");
+    let title2 = document.getElementById("title2");
+
+    title.classList.toggle("hidden")
+    title2.classList.toggle("hidden")
+}
+
+let loadCalendar = document.getElementById("loadCalendar");
+loadCalendar.onclick = function(){
+    document.getElementById("days_list").innerHTML = "";
+
+    console.log(document.getElementById("spreadsheetId").value);
+    
+
+    spreadsheetId = document.getElementById("spreadsheetId").value;
+    url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/Foglio1?key=${apiKey}`;
+    fetchGoogleSheetData();
+}
+
+
 function produceDecoration(day){
   let pack_cap_decoration = document.createElement("div");
   let day_mark = document.createElement("div");
@@ -58,106 +117,116 @@ function produceDecoration(day){
   return pack_cap_decoration;
 }
 
-function producePackCap(day, status){
-  let pack_cap = document.createElement("div");
-  let pack_cap_decoration = produceDecoration(day);
-  
-  pack_cap.classList.add("pac_cap", "pac_component");
+function producePackCap(day, status, isSpecial){
+    let pack_cap = document.createElement("div");
+    let pack_cap_decoration = produceDecoration(day);
+    
+    pack_cap.classList.add("pac_cap", "pac_component");
+    if(isSpecial)
+        pack_cap.classList.add("pac_cap_s");
 
-  pack_cap_decoration.classList.add("pack_cap_decoration");
-  pack_cap.appendChild(pack_cap_decoration);
+    pack_cap_decoration.classList.add("pack_cap_decoration");
+    pack_cap.appendChild(pack_cap_decoration);
 
-  switch(status){
-    case Pack_status.OPENED:
-      pack_cap.classList.add("open");
-      break;
-    case Pack_status.OPENABLE:  
-      pack_cap.onclick = function(){
+    switch(status){
+        case Pack_status.OPENED:
         pack_cap.classList.add("open");
-      }
-      break;
-    case Pack_status.LOCKED:
-      pack_cap.onclick = function(){
-        // Aggiunge la classe per avviare l'animazione
-        pack_cap.classList.add('locked');
+        break;
+        case Pack_status.OPENABLE:  
+        pack_cap.onclick = function(){
+            pack_cap.classList.add("open");
+        }
+        break;
+        case Pack_status.LOCKED:
+        pack_cap.onclick = function(){
+            // Aggiunge la classe per avviare l'animazione
+            pack_cap.classList.add('locked');
 
-        // Rimuove la classe dopo un certo tempo per fermare l'animazione
-        setTimeout(() => {
-          pack_cap.classList.remove('locked');
-        }, 500); // L'animazione durerà 3 secondi
-      }
-  } 
+            // Rimuove la classe dopo un certo tempo per fermare l'animazione
+            setTimeout(() => {
+            pack_cap.classList.remove('locked');
+            }, 500); // L'animazione durerà 3 secondi
+        }
+    } 
 
-  return pack_cap;
+    return pack_cap;
 }
 
-function producePackContent(){
-  let pack_content = document.createElement("div");
-  pack_content.classList.add("pac_content", "pac_component", "unfocus");
+function producePackContent(img, isSpecial){
+    let img_div = document.createElement("div");
+    img_div.classList.add("img", "img_b");
+    img_div.style.backgroundImage = `url(${img})`;
 
-  pack_content.onclick = function(){
-    focusedPack = pack_content;
+    let pack_content = document.createElement("div");
+    pack_content.classList.add("pac_content", "pac_component", "unfocus");
 
-    pack_content.classList.toggle("unfocus");
-    pack_content.classList.toggle("focus");
-    
-    if (backDrop.style.display == "none") {
-      backDrop.style.display = "block";
-    } else {
-      backDrop.style.display = "none";
+    if(isSpecial)
+        pack_content.classList.add("pac_content_s");
+
+    pack_content.onclick = function(){
+        focusedPack = pack_content;
+
+        togglePack(pack_content)
+        
+        if (backDrop.style.display == "none") {
+            backDrop.style.display = "block";
+        } else {
+            backDrop.style.display = "none";
+        }
     }
-  }
+
+    pack_content.appendChild(img_div)
 
   return pack_content;
 }
 
-// Genera i div e applica le dimensioni
-random_days_list.forEach((day, index) => {
-  let pack = document.createElement("div");  
+function createPacks(img_rows, special_day){        
 
+    // Genera i div e applica le dimensioni
+    random_days_list.forEach((day, index) => {
+        
+        let pack = document.createElement("div");  
+        let status;
 
-  let status;
+        if(day < 10)
+            status = Pack_status.OPENED;
+        else if (day == 10)
+            status = Pack_status.OPENABLE;
+        else
+            status = Pack_status.LOCKED;
+        
+        let pack_cap = producePackCap(day, status, day == special_day);
+        let pack_content = producePackContent(img_rows[day-1], day == special_day);
 
-  if(day < 9)
-    status = Pack_status.OPENED;
-  else if (day == 9)
-    status = Pack_status.OPENABLE;
-  else
-    status = Pack_status.LOCKED;
-  
-  let pack_cap = producePackCap(day, status);
-  let pack_content = producePackContent();
+        // prendo come riferimento arr "sizePatternB" ma è la stessa cosa per "sizePatternS"
+        // dal momento che entrambi hanno la stessa lunghezza
+        let gridRef = index % sizePatternB.length;
 
+        let sizeB;
+        let sizeS;
+        if(index != random_days_list.length-1){
+            sizeB = sizePatternB[gridRef]; // Applica il pattern ciclico
+            sizeS = sizePatternS[gridRef]; // Applica il pattern ciclico
+        }else{
+            sizeB = sizePatternB[gridRef];
+            sizeS = { col: 3, row: 1 }
+        }
 
-  // prendo come riferimento arr "sizePatternB" ma è la stessa cosa per "sizePatternS"
-  // dal momento che entrambi hanno la stessa lunghezza
-  let gridRef = index % sizePatternB.length;
+        pack.classList.add(
+            `col-span-${sizeS.col}`,
+            `row-span-${sizeS.row}`,
+            `md:col-span-${sizeB.col}`,
+            `md:row-span-${sizeB.row}`,
+            
+            "relative",
 
-  let sizeB;
-  let sizeS;
-  if(index != random_days_list.length-1){
-    sizeB = sizePatternB[gridRef]; // Applica il pattern ciclico
-    sizeS = sizePatternS[gridRef]; // Applica il pattern ciclico
-  }else{
-    sizeB = sizePatternB[gridRef];
-    sizeS = { col: 3, row: 1 }
-  }
+            "min-h-[12vh]",
+            "h-full",
+        );
+        
+        pack.appendChild(pack_content);
+        pack.appendChild(pack_cap);
 
-
-  pack.classList.add(
-    `col-span-${sizeS.col}`,
-    `row-span-${sizeS.row}`,
-    `md:col-span-${sizeB.col}`,
-    `md:row-span-${sizeB.row}`,
-    
-    "relative",
-
-    "min-h-[12vh]",
-    "h-full",
-  );
-  
-  pack.appendChild(pack_content);
-  pack.appendChild(pack_cap);
-
-  document.getElementById("days_list").appendChild(pack);
-});
+        document.getElementById("days_list").appendChild(pack);
+    });
+}

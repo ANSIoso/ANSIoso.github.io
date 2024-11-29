@@ -16,7 +16,13 @@
     <div id="backDrop" class="backdrop-blur-md"></div>
 
     <div id="title" class="md:h-1/6 flex items-center justify-center">
-        <div>Calendario</div> <div>Avvento</div>
+        <div>Calendario</div> <div class="flex flex-row"><p id="btn">A</p>vvento</div>
+    </div>
+
+    <div id="title2" class="md:h-1/6 flex items-center justify-center hidden">
+        A & A 
+        <input type="text" name="" id="spreadsheetId" class="h-[30%] w-[30%] mx-10 rounded border-4 border-black text-base">
+        <button id="loadCalendar" class="rounded border-4 h-[30%] w-[4%] border-black text-xl bg-white hover:scale-110 active:scale-90 transition-transform">♥</button>
     </div>
 
     <div id="days_list" class="grid grid-cols-3 md:grid-cols-6 gap-3 md:h-5/6 p-2 z-1">

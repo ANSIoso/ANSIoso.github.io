@@ -10,8 +10,25 @@ body{
     font-size: 4vh;
 }
 
+#title > div :hover{
+    color: #CC231E;
+}
+
+#title2{
+    padding: 20px 10px;
+
+    font-size: 4vh;
+}
+
 @media (min-width:1000px){
     #title > div{    
+        padding: 0 10px;
+
+
+        font-size: 10vh;
+    }
+
+    #title2{    
         padding: 0 10px;
 
 
@@ -32,11 +49,32 @@ body{
     border-radius: 15px;
 }
 
+.img{
+    height: 100%;
+    width: 100%;
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+
+    margin:-1px;
+    padding:1px;
+}
+
+.img_b{
+    filter: blur(8px);
+}
+
 .pac_content{
     background-color: #F5624D;
     border-color: #CC231E;
 
     border-width: 8px;
+    overflow:hidden;
+}
+
+.pac_content_s{
+    border-color: #f79d27;
 }
 
 @keyframes popup-in {
@@ -176,6 +214,10 @@ body{
 
     /* Quick on the way out */
     transition: 0.8s;
+}
+
+.pac_cap_s{
+    background-color: #f79d27;
 }
 
 .open {
