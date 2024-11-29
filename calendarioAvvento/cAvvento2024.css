@@ -1,3 +1,24 @@
+body{
+    background-color: #235E6F;
+
+    font-family: 'Mountains of Christmas', sans-serif;                                     
+}
+
+#title > div{
+    padding: 20px 10px;
+
+    font-size: 4vh;
+}
+
+@media (min-width:1000px){
+    #title > div{    
+        padding: 0 10px;
+
+
+        font-size: 10vh;
+    }
+}
+
 .pac_component{
     border: 5px solid black;
 
@@ -32,7 +53,8 @@
     bottom: -0.8vh;
 
     font-size: 4vh;
-    font-weight: 900;
+    font-weight: 700;
+    font-style: normal;
 
     color: aliceblue;
 }
