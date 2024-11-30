@@ -16,14 +16,29 @@
 
     <div id="backDrop" class="backdrop-blur-md"></div>
 
-    <div id="title" class="md:h-1/6 flex items-center justify-center">
-        <div>Calendario</div> <div class="flex flex-row"><p id="btn">A</p>vvento</div>
+    <div id="title" class="md:h-1/6 flex justify-between">
+        <div class="audioC hover:animate-spin cursor-pointer my-auto text-5xl">
+            🔔
+        </div>
+
+        <div class="flex">
+            Calendario <p id="btn">A</p>vvento
+        </div>
     </div>
 
-    <div id="title2" class="md:h-1/6 flex items-center justify-center hidden">
-        A & A 
-        <input type="text" name="" id="spreadsheetId" class="h-[30%] w-[30%] mx-10 rounded border-4 border-black text-base">
-        <button id="loadCalendar" class="rounded border-4 h-[30%] w-10 border-black text-xl bg-white hover:scale-110 active:scale-90 transition-transform">♥</button>
+    <div id="title2" class="md:h-1/6 flex justify-between hidden">
+        <div class="audioC hover:animate-spin cursor-pointer my-auto text-5xl">
+            🔔
+        </div>
+
+        <div class="flex space-x-5 justify-around">
+            <p> A&A </p>
+            <input type="text" name="" id="spreadsheetId" class="rounded border-4 h-10 my-auto border-black text-base">
+            
+            <button id="loadCalendar" class="rounded border-4 w-10 h-10 m-auto border-black text-xl bg-white 
+            hover:scale-110 active:scale-90
+            transition-transform">♥</button>
+        </div>
     </div>
 
     <div id="days_list" class="grid grid-cols-3 md:grid-cols-6 gap-3 md:h-5/6 p-2 z-1">

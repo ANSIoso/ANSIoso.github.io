@@ -265,9 +265,18 @@ loadCalendar.onclick = function(){
 }
 
 // ======= AUDIO =======
-navigator.mediaDevices.getUserMedia({ audio: true })
 var audioElement0 = new Audio("./song.mp3");
-audioElement0.play(); 
+
+let audioController = document.getElementsByClassName("audioC");
+
+for (let item of audioController) {
+    item.onclick = function(){    
+        if(audioElement0.paused)
+            audioElement0.play(); 
+        else
+            audioElement0.pause(); 
+    }
+}
 
 audioElement0.addEventListener('ended', function() {
     this.currentTime = 0;

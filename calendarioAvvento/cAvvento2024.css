@@ -10,7 +10,7 @@ body{
     font-family: 'Mountains of Christmas', sans-serif;                                     
 }
 
-#title > div{
+#title{
     padding: 20px 10px;
 
     font-size: 4vh;
@@ -27,7 +27,7 @@ body{
 }
 
 @media (min-width:1000px){
-    #title > div{    
+    #title{    
         padding: 0 10px;
 
 
