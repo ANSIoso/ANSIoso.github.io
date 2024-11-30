@@ -9,8 +9,9 @@
 
     <link href='https://fonts.googleapis.com/css?family=Mountains of Christmas' rel='stylesheet'>
 </head>
-<body class="md:h-svh">
-    <div class="sky h-dvh w-full absolute z-10 pointer-events-none">
+<body class="h-full md:h-svh">
+    <!-- <div class="sky fixed bottom-0 top-0 left-0 right-0 z-10 pointer-events-none"> -->
+    <div class="sky absolute w-full h-full min-h-screen z-10 pointer-events-none">
     </div>
 
     <div id="backDrop" class="backdrop-blur-md"></div>
@@ -22,7 +23,7 @@
     <div id="title2" class="md:h-1/6 flex items-center justify-center hidden">
         A & A 
         <input type="text" name="" id="spreadsheetId" class="h-[30%] w-[30%] mx-10 rounded border-4 border-black text-base">
-        <button id="loadCalendar" class="rounded border-4 h-[30%] w-[4%] border-black text-xl bg-white hover:scale-110 active:scale-90 transition-transform">♥</button>
+        <button id="loadCalendar" class="rounded border-4 h-[30%] w-10 border-black text-xl bg-white hover:scale-110 active:scale-90 transition-transform">♥</button>
     </div>
 
     <div id="days_list" class="grid grid-cols-3 md:grid-cols-6 gap-3 md:h-5/6 p-2 z-1">

@@ -65,9 +65,12 @@ async function fetchGoogleSheetData() {
         const data = await response.json();
         
         // Extract rows from the data
-        const rows = data.values;
-
-        createPacks(rows.slice(1, rows.length), rows[0][0])
+        const rows = data.values;                
+        
+        if(rows){
+          document.getElementById("days_list").innerHTML = "";
+          createPacks(rows.slice(1, rows.length), rows[0][0])
+        }
         
     } catch (error) {
         console.error(error);
@@ -86,11 +89,7 @@ btn.onclick = function(){
 }
 
 let loadCalendar = document.getElementById("loadCalendar");
-loadCalendar.onclick = function(){
-    document.getElementById("days_list").innerHTML = "";
-
-    console.log(document.getElementById("spreadsheetId").value);
-    
+loadCalendar.onclick = function(){   
 
     spreadsheetId = document.getElementById("spreadsheetId").value;
     url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/Foglio1?key=${apiKey}`;
@@ -180,6 +179,9 @@ function producePackContent(img, isSpecial){
   return pack_content;
 }
 
+const date = new Date();
+const today = date.getDate();
+
 function createPacks(img_rows, special_day){        
 
     // Genera i div e applica le dimensioni
@@ -188,15 +190,18 @@ function createPacks(img_rows, special_day){
         let pack = document.createElement("div");  
         let status;
 
-        if(day < 10)
+        if(day < today)
             status = Pack_status.OPENED;
-        else if (day == 10)
+        else if (day == today)
             status = Pack_status.OPENABLE;
         else
             status = Pack_status.LOCKED;
         
         let pack_cap = producePackCap(day, status, day == special_day);
         let pack_content = producePackContent(img_rows[day-1], day == special_day);
+
+        console.log(img_rows[day-1]);
+        
 
         // prendo come riferimento arr "sizePatternB" ma è la stessa cosa per "sizePatternS"
         // dal momento che entrambi hanno la stessa lunghezza

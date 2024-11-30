@@ -113,7 +113,7 @@ body{
     right: 0;
     bottom: 0;
 
-    width: 60vh; /* Larghezza del div */
+    width: 95%; /* Larghezza del div */
     height: 70vh; /* Altezza del div */
 
     margin: auto; /* Centro automatico */
@@ -121,6 +121,12 @@ body{
     z-index: 10;
 
     animation: popup-in 0.5s ease-out; /* Animazione per l'entrata */
+}
+
+@media (min-width:1000px){
+    .focus{
+        width: 60vh; /* Larghezza del div */
+    }
 }
 
 .unfocus {
