@@ -1,0 +1,359 @@
+[33mcommit d18c55e100ac4c3be4d8135f33b33465412a5ae1[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Sat Nov 30 16:44:12 2024 +0100
+
+    rifinita interfaccia calendario, aggiunta sincronizzazione con tempo attuale
+
+[33mcommit 8f52ee3145effcd1e0b07d4c47c4d580fbf83610[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri Nov 29 21:30:26 2024 +0100
+
+    funzionamento generale del calendario definito, necessario polish
+
+[33mcommit 97d852f67b3d77f50fe215840ce001d4f7af4740[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri Nov 29 16:04:56 2024 +0100
+
+    aggiunta animazione visualizzazione dentro pacco
+
+[33mcommit 865ef18f4448d80d8dae74bf807112e829efc46e[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri Nov 29 11:06:05 2024 +0100
+
+    modifiche calendario avvento: font, animazione neve, colori
+
+[33mcommit 7e1b6cae379f09bf4a1e059699318e378fc9be78[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Thu Nov 28 15:56:17 2024 +0100
+
+    aggiunta animazioni per pacchi chiusi, modificato stile coperchio pacco
+
+[33mcommit f88d366705c354645f6669d78edaf8f66f5bf276[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Wed Nov 27 18:50:55 2024 +0100
+
+    aggiunta targhetta pacco regelo
+
+[33mcommit ced136e3f92c46b3b80321cfbc603767d9cdd887[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Wed Nov 27 16:13:03 2024 +0100
+
+    aggiunta collegamento verso calendario avvento
+
+[33mcommit 7ae0d651d568656434ae6090e91af51032311bfb[m
+Merge: 3cf18a5 62a61bf
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Wed Nov 27 13:06:41 2024 +0100
+
+    Merge branch 'main' of https://github.com/ANSIoso/ANSIoso.github.io
+
+[33mcommit 3cf18a51e60f348a28350719575e21917cfcab43[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Wed Nov 27 13:05:30 2024 +0100
+
+    aggiunta pagina per il calendario dell'avvento
+
+[33mcommit 62a61bfab9d8c8428c383bc362e9f3f0d45f111d[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Mon Nov 25 11:22:38 2024 +0100
+
+    aggiunto test utilizzo della libreria three_js
+
+[33mcommit dab57697c06f6e5ae27b8542d2ff985a0bfbe945[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri Jun 7 19:18:16 2024 +0200
+
+    corretta descrizione progetto computer graphics
+
+[33mcommit 98f807fdde060a836b2ddf839c18a22cbf138513[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri Jun 7 19:12:16 2024 +0200
+
+    aggiustato stile file doc
+
+[33mcommit 63ea3edf6e85cb27cca37309b24cc900ebb84012[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri Jun 7 18:58:13 2024 +0200
+
+    aggiunta descrizione progetto computer graphics
+
+[33mcommit 4168e49081bbbe5850eaf63c0ebbacedeb4729ca[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri May 31 17:07:41 2024 +0200
+
+    fix minori all'adio
+
+[33mcommit 3705b562a90bd46bf899adbe46b658adf633a44b[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Thu May 30 22:27:57 2024 +0200
+
+    aggiunti suoni in game
+
+[33mcommit 6c79e9c47f897b244700da93ec4abe5fbaad5cd6[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Thu May 30 13:38:05 2024 +0200
+
+    aggiunte impostazioni dell'engine
+
+[33mcommit a0f65d94785e024ae607c0d9a54410525cc263af[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Tue May 28 21:31:41 2024 +0200
+
+    riformattazione del codice e modifica spown nemici
+
+[33mcommit c52dac7fb99f7129bfadf2f06942ec59e78ccee1[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Tue May 28 17:50:43 2024 +0200
+
+    migliorati controlli smarthphone, aggiunto tasto per accendere e spegnere la luce
+
+[33mcommit cd8665e8271bc98480cca2aa63e8d09117294964[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Tue May 28 10:26:33 2024 +0200
+
+    migliorati comandi da smarthphone con full screen mode
+
+[33mcommit a36f8de413fe2475161cff504967670a860b2dc0[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Mon May 27 22:14:28 2024 +0200
+
+    aggiustate cartelle progetto motore grafico
+
+[33mcommit 1dff511052ef148352f654b8dff97ee3cef26fe2[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Mon May 27 21:20:28 2024 +0200
+
+    -aggiunto nemico e suo movimento - aggiunti comandi da smarthphone
+
+[33mcommit f1fe7fbc90eb20df75cc420d25e805847d48f994[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Thu May 23 13:08:51 2024 +0200
+
+    progressi su controllo e creazione generatore livelli
+
+[33mcommit 9b5c1e36b611c5f198f0f2c9427604725cfe925f[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Mon May 20 13:41:49 2024 +0200
+
+    test funzionamento comandi camera da smarthphone
+
+[33mcommit 559c590ca093fa9cfdddcbed30b1d88a907375b5[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri May 3 19:06:28 2024 +0200
+
+    aggiunto a motore grafico proiezione textures
+
+[33mcommit b38710f0c3ec4fbb295eaaaac52b1d34f56510d8[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri Apr 26 11:08:55 2024 +0200
+
+    triste scoperta per webgl su git hub pages
+
+[33mcommit 41c29ab55a2590af48c4e41dba5a913e1b7d2ae4[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri Apr 26 11:02:29 2024 +0200
+
+    aggiunti modelli per motore grafico e correzione h ref
+
+[33mcommit 3fa039a9c9cdb7af8135a9ae8dcbe220fab66691[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri Apr 26 11:01:09 2024 +0200
+
+    aggiunti modelli per motore grafico
+
+[33mcommit ad376d38f6409df8c714dfbb2742b8d569957ffb[m
+Merge: 4109f97 5392df3
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri Apr 26 10:55:23 2024 +0200
+
+    Merge branch 'main' of https://github.com/ANSIoso/ANSIoso.github.io
+
+[33mcommit 4109f97a88c189735a3e578b931f9839159f3dc4[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri Apr 26 10:53:18 2024 +0200
+
+    aggiunto test motore grafico webgl senza ombre
+
+[33mcommit 5392df37134b6f27983fa64e85c5cee684a9c6bb[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Sat Jul 15 10:44:30 2023 +0200
+
+    Update anna1.html
+
+[33mcommit d62fe32f44c0487fbb6b38adb0d0c1c03581f7e5[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri Jul 14 21:36:07 2023 +0200
+
+    Update anna1.html
+
+[33mcommit 7c0638589eea696d52a40831733004261ac2d411[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri Jul 14 18:39:30 2023 +0200
+
+    Update anna1.html
+
+[33mcommit 6006b57ff4c554fb8d761ca1ad7aa79af49eda21[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri Jul 14 17:59:01 2023 +0200
+
+    Update anna1.html
+
+[33mcommit fa086b709a3ce82ed8e32cf5d49e2a5018041b03[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri Jul 14 16:53:45 2023 +0200
+
+    Update anna1.html
+
+[33mcommit 0c05eef66c07b1db30a53f4d6f0656b17f4fb7ca[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri Jul 14 16:01:32 2023 +0200
+
+    modifiche
+
+[33mcommit a637d15968e1395bf1441b375030a38fa2b3899a[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Wed May 3 23:22:32 2023 +0200
+
+    riformattato codice aggiunto scroll nel caso troppe lettere
+
+[33mcommit 1a11c52be29a6747e8be0a3919b25447af9ad729[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Mon May 1 17:54:47 2023 +0200
+
+    Fine sviluppo sito affinità
+
+[33mcommit bbe2837f1121a61c1983606d5e4363948d511467[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Sun Apr 30 20:09:12 2023 +0200
+
+    altri aggiustamenti minori alla grafica
+
+[33mcommit c0e9f424953219f4e9d2992cddd31305cbaee4a0[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Sun Apr 30 13:13:23 2023 +0200
+
+    aggiustata visualizzazione mobile e tasti reset
+
+[33mcommit 5f96df65344d19c459434d74be3bfcf2fcbd8a1d[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Sat Apr 29 01:14:24 2023 +0200
+
+    inizio set up grafica mancano animazioni
+
+[33mcommit eaf21cac37f7ce126fc2fd7859e553247166339e[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Tue Apr 25 12:05:43 2023 +0200
+
+    reset grafica aggiunte funzionalità tasti
+
+[33mcommit 5220c72cb845e928abe92e16a0d4d8850963366f[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Fri Apr 21 13:04:53 2023 +0200
+
+    introduzione di nuovi tasti funzione
+    
+    i tasti non sono ancora funzionanti
+
+[33mcommit 50d0b878e78564a6e5c70b07c14686d222599668[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Wed Apr 19 20:17:57 2023 +0200
+
+    test glassy effect
+
+[33mcommit b1cc4f9343645d3e82837b38fba02ad3c37a10fb[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Tue Apr 18 16:12:20 2023 +0200
+
+    funzionamento terminato  inizio rifiniture grafiche
+
+[33mcommit fb6b0806c09745824e9c27dc6dbffbf95a373fa6[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Mon Apr 17 16:23:12 2023 +0200
+
+    fixato bug spazio vuoto
+    
+     tale bug considerava anche spazio vuoto come carattere
+
+[33mcommit 636b619de260539e592cee7c514ce54de549a99e[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Mon Apr 17 13:47:38 2023 +0200
+
+    funzionamento dell'algoritmo completato
+
+[33mcommit ae6975c623d66e7f0ac583a5aa928a965a5b0924[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Sun Apr 16 13:17:36 2023 +0200
+
+    conta delle occorrenze delle lettere nei nomi completata
+
+[33mcommit 24a8030bcf09a75a36b7c3d845e619f73da1ab5f[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Sat Apr 15 16:32:29 2023 +0200
+
+    javascript function test
+
+[33mcommit 2d998334a8678b4f635348fb101c401f07ead56d[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Sat Apr 15 16:17:16 2023 +0200
+
+    aggiustato link per pagina calcolo affinità
+
+[33mcommit f9c9d155084705a73420edfddc0dde23464b5c68[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Sat Apr 15 13:58:20 2023 +0200
+
+    creazione pagina CalcoloAffinitaMM
+
+[33mcommit 48e9f9d5f8d5eb1c1d1b7d5f4e30933d30407b70[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Tue Feb 14 01:34:05 2023 +0100
+
+    update anna
+
+[33mcommit 5aad91a99dd3c546be05143fdd14bb908b3f43cb[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Tue Feb 14 01:07:05 2023 +0100
+
+    prova linkl
+
+[33mcommit 5f48c6d9e216e52925405f15b24ed13a092126a0[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Sun Feb 12 01:06:54 2023 +0100
+
+    pagina provvisoria
+
+[33mcommit 24f1cf96b62f912f5197188462ca23474f1155b7[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Sun Feb 12 00:55:26 2023 +0100
+
+    adw
+
+[33mcommit e3664c46fa99ab470af4e2599c8d399aab7d4aa3[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Sun Feb 12 00:54:37 2023 +0100
+
+    prova stile footer
+
+[33mcommit 84db799a0f549814c14e26e4c712c86a72ccc11e[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Sun Feb 12 00:52:47 2023 +0100
+
+    prova
+
+[33mcommit 89e45848dd2fa4eed50cbc20c4c93bca9c9aa829[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Sun Feb 12 00:52:18 2023 +0100
+
+    aggiornamento footer1
+
+[33mcommit a7ca6c0674d0ffe9991de05f543e8f454961927a[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Sun Feb 12 00:50:29 2023 +0100
+
+    aggiornamento footer
+
+[33mcommit b7c5f0bd1f18ad585c91e9be42e289032aa1721c[m
+Author: Antonio Sisinni <92176296+ANSIoso@users.noreply.github.com>
+Date:   Sun Feb 12 00:48:46 2023 +0100
+
+    caricamento iniziale
