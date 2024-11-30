@@ -1,5 +1,11 @@
 body{
-    background-color: #235E6F;
+    background: linear-gradient(
+        to bottom,
+        #235E6F 0%,    /* Blu scuro all'inizio */
+        #235E6F 80%,   /* Blu scuro predominante fino all'80% */
+        #FFFFFF 100%   /* Bianco liscio nella parte finale */
+    );
+    /* background-color: #235E6F; */
 
     font-family: 'Mountains of Christmas', sans-serif;                                     
 }
