@@ -1,31 +1,120 @@
 <!DOCTYPE html>
 <html>
     <style>
-        footer {
-            background-color: lightgray;
-            padding: 20px;
-            text-align: center;
+
+        :root {
+            --midnight-green: #244855ff;
+            --vermilion: #e64833ff;
+            --bole: #874f41ff;
+            --ash-gray: #90aeadff;
+            --champagne: #fbe9d0ff;
         }
 
-        body{
-            width: 50%;
-            margin: 0 auto;
+        footer {
+
+            background-color: lightgray;
+            padding: 20px;
+            
             text-align: center;
+
+            width: 100%;
+        }
+
+        body {
+            height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+            justify-content: space-between;
+
+            background-color: var(--midnight-green);
+        }
+
+        .project_div{
+            padding: 1vh;
+
+            background-color: var(--ash-gray);
+
+            cursor: pointer;
+
+            transition: transform 0.3s ease;
+        }
+        
+        .project_div:hover{
+            transform: scale(1.1);
+        }
+
+        .project_specs{
+            display: flex;
+            flex-direction: row;
+
+            justify-content: end;
+
+            font-size: small;
+            gap: 5%;
+        }
+
+
+
+        #examples {
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+            gap: 20px 5px;
         }
     </style>
 
     <body>
-    <h1>Hello World</h1>
-    <p>I'm hosted with GitHub Pages.</p>
-    <p><a href="calcoloAffinitaMM/page.html">Calcolo Affinita</a></p>
-    <p><a href="Progetto/project/index.html">test motore grafico</a></p>
-    <p><a href="Test_ThreeJs/index.html">test three_js</a></p>
-    <p><a href="calendarioAvvento/cAvvento2024.html">test three_js</a></p>
+        <h1>Hello World</h1>
+        <p>I'm hosted with GitHub Pages.</p>
+
+        <div id="examples">
+
+            <div class="project_div" onclick='redirect("calcoloAffinitaMM/page.html")'>
+                Calcolo Affinita
+
+                <div class="project_specs">
+                    <p>css</p>
+                </div>
+            </div>
+            
+            <div class="project_div" onclick='redirect("calendarioAvvento/cAvvento2024.html")'>
+                Calendario Avvento
+
+                <div class="project_specs">
+                    <p>css</p>
+                    <p>tailwind</p>
+                    <p>Google Sheets API</p>
+                </div>
+            </div>
+            
+            <div class="project_div" onclick='redirect("Progetto/project/index.html")'>
+                Passeggiata nel Bosco
+
+                <div class="project_specs">
+                    <p>WebGl</p>
+                </div>
+            </div>
+            
+            <div class="project_div" onclick='redirect("Test_ThreeJs/index.html")'>
+                Figure Geometriche
+
+                <div class="project_specs">
+                    <p>Threejs</p>
+                </div>
+            </div>             
+        </div>
     </body>
 
     <footer>
         <p>Copyright © Antonio Sisinni</p>
     </footer>
 
-
+    <script>
+        function redirect(page){
+            window.location.href = page;
+        }
+    </script>
 </html>

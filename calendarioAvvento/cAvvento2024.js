@@ -107,6 +107,11 @@ function producePackContent(img, isSpecial){
         } else {
             backDrop.style.display = "none";
         }
+
+        if(img_div.style.backgroundSize = "cover")
+            img_div.style.backgroundSize = "contain"
+        else
+            img_div.style.backgroundSize = "contain"
     }
 
     pack_content.appendChild(img_div)
