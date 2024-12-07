@@ -111,7 +111,7 @@ function producePackContent(img, isSpecial){
         if(img_div.style.backgroundSize = "cover")
             img_div.style.backgroundSize = "contain"
         else
-            img_div.style.backgroundSize = "contain"
+            img_div.style.backgroundSize = "cover"
     }
 
     pack_content.appendChild(img_div)
